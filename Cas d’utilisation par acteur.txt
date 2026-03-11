@@ -1,0 +1,47 @@
+﻿Cas d’utilisation par acteur
+1.Agent du Cadastre
+* S’authentifier
+
+* Consulter la carte cadastrale
+
+* Rechercher une parcelle
+
+* Consulter l’état juridique d’une parcelle
+
+* Enregistrer une opération cadastrale
+
+* Recevoir une alerte de litige
+
+* Blocage automatique d’une opération cadastrale (include)
+
+2 Agent judiciaire / Tribunal
+   * S’authentifier
+
+   * Enregistrer un dossier de litige
+
+   * Mettre à jour le statut d’un litige
+
+   * Associer un litige à une parcelle
+
+   * Consulter les parcelles en contentieux
+
+
+
+3 Collectivité territoriale
+      * Consulter la carte foncière
+
+      * Consulter les parcelles à risque
+
+      * Consulter les alertes actives
+
+
+4 Administrateur du système
+         * Gérer les utilisateurs
+
+         * Gérer les rôles et permissions
+
+         * Paramétrer les règles d’alerte
+
+         * Gérer la base de données SIG
+
+         * Superviser le système

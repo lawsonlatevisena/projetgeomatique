@@ -1,0 +1,413 @@
+{
+  "info": {
+    "name": "Système d'Alerte SIG - Litiges Fonciers",
+    "description": "Collection API complète pour le projet de gestion des litiges fonciers",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@litige.tg\",\n  \"mot_de_passe\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"newuser@litige.tg\",\n  \"nom\": \"Nouveau Utilisateur\",\n  \"mot_de_passe\": \"password123\",\n  \"role_id\": 2,\n  \"institution\": \"Cadastre\",\n  \"telephone\": \"+228 90 XX XX XX\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/auth/register",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/auth/profile",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "auth", "profile"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Agent Cadastre",
+      "item": [
+        {
+          "name": "Consulter Carte",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/cadastre/carte",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "cadastre", "carte"]
+            }
+          }
+        },
+        {
+          "name": "Rechercher Parcelle",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/cadastre/rechercher?numero=MAR-2024-001",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "cadastre", "rechercher"],
+              "query": [
+                {
+                  "key": "numero",
+                  "value": "MAR-2024-001"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Consulter Parcelle",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/cadastre/parcelle/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "cadastre", "parcelle", "1"]
+            }
+          }
+        },
+        {
+          "name": "Enregistrer Opération",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"parcelle_id\": 1,\n  \"type_operation\": \"transfert_propriete\",\n  \"description\": \"Transfert de propriété à nouveau propriétaire\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/cadastre/operation",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "cadastre", "operation"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Agent Judiciaire",
+      "item": [
+        {
+          "name": "Enregistrer Dossier Litige",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numero_dossier\": \"LIT-2026-003\",\n  \"parcelle_id\": 4,\n  \"type_litige\": \"titre_multiple\",\n  \"description\": \"Trois titres de propriété pour la même parcelle\",\n  \"demandeur\": \"Nouveau Demandeur\",\n  \"defendeur\": \"Nouveau Défendeur\",\n  \"tribunal_competent\": \"Tribunal 1ère Instance de Lomé\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/litige/dossier",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "litige", "dossier"]
+            }
+          }
+        },
+        {
+          "name": "Consulter Alertes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/litige/alertes",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "litige", "alertes"]
+            }
+          }
+        },
+        {
+          "name": "Mettre à jour Litige",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"statut\": \"resolu\",\n  \"reference_jugement\": \"JUGEMENT-2026-001\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/litige/dossier/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "litige", "dossier", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Collectivité Territoriale",
+      "item": [
+        {
+          "name": "Consulter Carte Foncière",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/collectivite/carte-fonciere?region=Maritime",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "collectivite", "carte-fonciere"],
+              "query": [
+                {
+                  "key": "region",
+                  "value": "Maritime"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Parcelles à Risque",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/collectivite/parcelles-a-risque",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "collectivite", "parcelles-a-risque"]
+            }
+          }
+        },
+        {
+          "name": "Alertes Actives",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/collectivite/alertes-actives",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "collectivite", "alertes-actives"]
+            }
+          }
+        },
+        {
+          "name": "Statistiques",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/collectivite/statistiques?region=Maritime",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "collectivite", "statistiques"],
+              "query": [
+                {
+                  "key": "region",
+                  "value": "Maritime"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Administration",
+      "item": [
+        {
+          "name": "Lister Utilisateurs",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/admin/utilisateurs",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "admin", "utilisateurs"]
+            }
+          }
+        },
+        {
+          "name": "Status Base Données",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/admin/base-donnees/status",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "admin", "base-donnees", "status"]
+            }
+          }
+        },
+        {
+          "name": "Paramètres Alertes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/admin/parametres-alertes",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "admin", "parametres-alertes"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "name": "token",
+      "value": ""
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+﻿Projet dans le cadre de la soutenance du Master de Géomatique à l’Université de Lomé
+
+Titre : Mise en place d’un système d’alerte SIG Web pour la gestion des litiges fonciers en lien avec le cadastre : cas de la région maritime du Togo
+Les litiges fonciers constituent un problème majeur dans la région maritime du Togo, où la pression sur les terres, la complexité des procédures et l’absence de coordination entre les institutions (justice, cadastre, collectivités) favorisent les conflits. Actuellement, les services cadastraux ne disposent pas toujours d'informations actualisées sur les dossiers fonciers en contentieux, ce qui entraîne souvent la délivrance de titres ou de documents sur des parcelles litigieuses, aggravant les tensions sociales et juridiques.
+Face à ce constat, ce projet propose la mise en place d’un système d’alerte SIG Web permettant de centraliser, visualiser et partager les informations relatives aux parcelles en litige. Ce système sera connecté à une base de données géospatiale et offrira aux agents du cadastre un outil d'aide à la décision capable de bloquer automatiquement toute opération cadastrale sur des terrains faisant l’objet d’un contentieux judiciaire.
+L’approche repose sur l'utilisation de technologies SIG Web (QGIS, PostgreSQL/PostGIS, GeoServer, Leaflet ou OpenLayers) pour développer une application interactive intégrant :
+    • Les données cadastrales existantes,
+    • Les dossiers de litige provenant des tribunaux ou commissions foncières,
+    • Des fonctions d’alerte en temps réel.
+L’objectif final est de renforcer la sécurisation foncière, de réduire les conflits liés à la double vente ou aux titres multiples, et de promouvoir une interaction efficace entre les institutions judiciaires et cadastrales.
+
+
+
+
+
+
+
+
+
+
+1. CONTEXTE ET JUSTIFICATION
+1.1 Contexte général
+La Région Maritime du Togo connaît une forte pression foncière due à :
+    • La croissance démographique rapide,
+    • L’urbanisation non planifiée,
+    • La spéculation foncière,
+    • La coexistence de régimes fonciers modernes et coutumiers.
+Ces facteurs engendrent une multiplication des litiges fonciers, notamment :
+    • La double ou multiple vente de parcelles,
+    • Les conflits de limites,
+    • Les superpositions de titres fonciers,
+    • L’absence de mise à jour du plan cadastral.
+1.2 Problématique
+Les mécanismes actuels de gestion des litiges fonciers reposent largement sur des procédures manuelles, fragmentées et peu coordonnées entre :
+    • Le Cadastre,
+    • La Conservation foncière,
+    • Les Collectivités territoriales,
+    • Les juridictions compétentes.
+Il en résulte :
+    • Des délais de traitement longs,
+    • Une faible traçabilité des dossiers,
+    • Un risque élevé d’erreurs et de fraude,
+    • Une absence de système d’alerte précoce.
+
+1.3 Justification du projet
+L’intégration des Systèmes d’Information Géographique (SIG) et des technologies Web offre une opportunité majeure pour :
+    • Centraliser les données foncières,
+    • Détecter automatiquement les situations à risque,
+    • Alerter les acteurs concernés en temps réel,
+    • Renforcer la transparence et la sécurité foncière.
+2. OBJECTIFS DU PROJET
+2.1 Objectif général
+Mettre en place un système d’alerte SIG Web permettant la détection précoce, la gestion et le suivi des litiges fonciers en lien avec le cadastre dans la Région Maritime du Togo.
+2.2 Objectifs spécifiques
+    • Identifier et cartographier les principales zones à risque de litiges fonciers dans la région Maritime ;
+    • Intégrer une base de données foncière géoréférencée des données cadastrales, domaniales et géospatiales ;
+    • Concevoir une plateforme Web-GIS interactive permettant la visualisation des parcelles, l’enregistrement des plaintes et la génération d’alertes automatiques ;
+3. ZONE D’ÉTUDE
+La zone d’étude couvre l’ensemble de la Région Maritime du Togo, incluant :
+    • Les zones urbaines (Lomé et périphéries),
+    • Les zones périurbaines en forte expansion,
+    • Les zones rurales à forte pression foncière.
+4. MÉTHODOLOGIE
+4.1 Collecte des données
+Données spatiales
+    • Plan cadastral (parcelles, limites administratives)
+    • Images satellitaires (Sentinel-2, orthophotos)
+    • Réseaux (voirie, hydrographie)
+Données attributaires
+    • Titres fonciers
+    • Actes de mutation
+    • Dossiers de litiges
+    • Données juridiques associées
+4.2 Modélisation de la base de données SIG
+    • Conception d’un Modèle Conceptuel de Données (MCD) foncier
+    • Implémentation sous PostgreSQL / PostGIS
+    • Gestion des relations : parcelles – propriétaires – titres – litiges
+4.3 Développement du système d’alerte
+Règles de détection automatique
+    • Superposition de parcelles titrées
+    • Plusieurs titres sur une même parcelle
+    • Incohérence surface cadastrale / surface déclarée
+    • Chevauchement avec domaine public
+    • Multiplicité de mutations sur une courte période
+Types d’alertes
+    • Alertes cartographiques
+    • Alertes textuelles (SMS / email)
+    • Tableaux de bord décisionnels
+4.4 Développement de la plateforme SIG Web
+Architecture technique
+    • Backend : Django / Flask / Node.js
+    • Base de données : PostGIS
+    • Serveur cartographique : GeoServer
+    • Frontend : HTML, CSS, JavaScript, Leaflet / OpenLayers
+    • Sécurité : authentification, rôles utilisateurs
+5. RÉSULTATS ATTENDUS
+    • Une plateforme SIG Web fonctionnelle
+    • Une base de données foncière centralisée et sécurisée
+    • Un système d’alerte précoce opérationnel
+    • Une réduction significative des litiges fonciers
+    • Une amélioration de la transparence foncière
+    • Une meilleure prise de décision par les autorités
+
+
+Conclusion
+Ce projet constitue une solution innovante et opérationnelle pour répondre aux défis de la gestion foncière dans la Région Maritime du Togo. L’approche SIG Web combinée à un système d’alerte précoce permettra de prévenir, gérer et réduire durablement les litiges fonciers, tout en renforçant la gouvernance foncière.

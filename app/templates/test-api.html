@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test API SIG Litiges Fonciers</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            padding: 40px;
+        }
+        
+        .card {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 25px;
+            border-radius: 5px;
+        }
+        
+        .card h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            color: #555;
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.95em;
+            font-family: inherit;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.2);
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95em;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .response {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        
+        .success {
+            border-left-color: #27ae60;
+        }
+        
+        .error {
+            border-left-color: #e74c3c;
+        }
+        
+        .response.success {
+            background: #27ae60;
+        }
+        
+        .response.error {
+            background: #e74c3c;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .tab-btn {
+            background: transparent;
+            color: #666;
+            border: none;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.3s;
+        }
+        
+        .tab-btn.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+        }
+        
+        .status-badge {
+            display: inline-block;
+            background: #27ae60;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .status-badge.loading {
+            background: #f39c12;
+        }
+        
+        .status-badge.error {
+            background: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>️ SIG Litiges Fonciers</h1>
+            <p>Test API - Authentification & Endpoints</p>
+            <div id="status" style="margin-top: 15px;">
+                <span class="status-badge" id="statusBadge">Online</span>
+            </div>
+        </div>
+        
+        <div class="content">
+            <!-- AUTHENTIFICATION -->
+            <div class="card">
+                <h2> Authentification</h2>
+                
+                <div class="form-group">
+                    <label>Sélectionner un utilisateur:</label>
+                    <select id="userSelect" onchange="loadUserCredentials()">
+                        <option value="">-- Choisir --</option>
+                        <option value="admin"> Admin (admin@litige.tg)</option>
+                        <option value="cadastre"> Agent Cadastre (agent.cadastre@litige.tg)</option>
+                        <option value="judiciaire"> Agent Judiciaire (agent.judiciaire@litige.tg)</option>
+                        <option value="collectivite"> Collectivité (collectivite@litige.tg)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" id="email" placeholder="admin@litige.tg">
+                </div>
+                
+                <div class="form-group">
+                    <label>Mot de passe:</label>
+                    <input type="password" id="password" placeholder="admin123">
+                </div>
+                
+                <button onclick="login()"> Se connecter</button>
+                
+                <div id="loginResponse" class="response" style="display:none;"></div>
+            </div>
+            
+            <!-- ENDPOINTS -->
+            <div class="card">
+                <h2> Endpoints</h2>
+                
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab('cadastre')">Cadastre</button>
+                    <button class="tab-btn" onclick="switchTab('litige')">Litige</button>
+                    <button class="tab-btn" onclick="switchTab('collectivite')">Collectivité</button>
+                    <button class="tab-btn" onclick="switchTab('admin')">Admin</button>
+                </div>
+                
+                <!-- Cadastre -->
+                <div id="cadastre" class="tab-content active">
+                    <div class="form-group">
+                        <label>Requête:</label>
+                        <select id="cadastreEndpoint" onchange="updateCadastreInfo()">
+                            <option value="/api/cadastre/carte">GET - Consulter la carte</option>
+                            <option value="/api/cadastre/parcelle/1">GET - Détails parcelle #1</option>
+                            <option value="/api/cadastre/rechercher?nom=MAR">GET - Rechercher parcelle</option>
+                        </select>
+                    </div>
+                    <button onclick="testEndpoint('/api/cadastre/carte')">️ Tester</button>
+                    <div id="cadastreResponse" class="response" style="display:none;"></div>
+                </div>
+                
+                <!-- Litige -->
+                <div id="litige" class="tab-content">
+                    <div class="form-group">
+                        <label>Requête:</label>
+                        <select id="litigeEndpoint">
+                            <option value="/api/litige/alertes">GET - Lister les alertes</option>
+                            <option value="/api/litige/dossier/1">GET - Détails litige #1</option>
+                        </select>
+                    </div>
+                    <button onclick="testEndpoint('/api/litige/alertes')">️ Tester</button>
+                    <div id="litigeResponse" class="response" style="display:none;"></div>
+                </div>
+                
+                <!-- Collectivité -->
+                <div id="collectivite" class="tab-content">
+                    <div class="form-group">
+                        <label>Requête:</label>
+                        <select id="collectiviteEndpoint">
+                            <option value="/api/collectivite/carte-fonciere">GET - Carte foncière</option>
+                            <option value="/api/collectivite/parcelles-a-risque">GET - Parcelles à risque</option>
+                            <option value="/api/collectivite/statistiques">GET - Statistiques</option>
+                        </select>
+                    </div>
+                    <button onclick="testEndpoint('/api/collectivite/carte-fonciere')"> Tester</button>
+                    <div id="collectiviteResponse" class="response" style="display:none;"></div>
+                </div>
+                
+                <!-- Admin -->
+                <div id="admin" class="tab-content">
+                    <div class="form-group">
+                        <label>Requête:</label>
+                        <select id="adminEndpoint">
+                            <option value="/api/admin/utilisateurs">GET - Lister utilisateurs</option>
+                            <option value="/api/admin/base-donnees/status">GET - Status DB</option>
+                            <option value="/api/admin/roles">GET - Lister rôles</option>
+                        </select>
+                    </div>
+                    <button onclick="testEndpoint('/api/admin/utilisateurs')">️ Tester</button>
+                    <div id="adminResponse" class="response" style="display:none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let token = localStorage.getItem('api_token');
+        
+        const users = {
+            'admin': { email: 'admin@litige.tg', password: 'admin123' },
+            'cadastre': { email: 'agent.cadastre@litige.tg', password: 'password123' },
+            'judiciaire': { email: 'agent.judiciaire@litige.tg', password: 'password123' },
+            'collectivite': { email: 'collectivite@litige.tg', password: 'password123' }
+        };
+        
+        function loadUserCredentials() {
+            const select = document.getElementById('userSelect');
+            const user = users[select.value];
+            if (user) {
+                document.getElementById('email').value = user.email;
+                document.getElementById('password').value = user.password;
+            }
+        }
+        
+        async function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const response = document.getElementById('loginResponse');
+            
+            if (!email || !password) {
+                response.style.display = 'block';
+                response.textContent = ' Email et mot de passe requis';
+                response.classList.remove('success');
+                response.classList.add('error');
+                return;
+            }
+            
+            response.style.display = 'block';
+            response.textContent = ' Connexion en cours...';
+            response.classList.remove('error', 'success');
+            
+            try {
+                const result = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: email,
+                        mot_de_passe: password
+                    })
+                });
+                
+                const data = await result.json();
+                
+                if (result.ok && data.access_token) {
+                    token = data.access_token;
+                    localStorage.setItem('api_token', token);
+                    response.textContent = ' Connexion réussie!\n\nToken stocké:\n' + token.substring(0, 50) + '...';
+                    response.classList.add('success');
+                    response.classList.remove('error');
+                } else {
+                    response.textContent = ' Erreur: ' + (data.message || 'Connexion échouée');
+                    response.classList.add('error');
+                    response.classList.remove('success');
+                }
+            } catch (error) {
+                response.textContent = ' Erreur: ' + error.message;
+                response.classList.add('error');
+                response.classList.remove('success');
+            }
+        }
+        
+        async function testEndpoint(endpoint) {
+            const responseDiv = document.querySelector('.tab-content.active').querySelector('.response');
+            responseDiv.style.display = 'block';
+            responseDiv.textContent = ' Chargement...';
+            
+            try {
+                const headers = { 'Content-Type': 'application/json' };
+                if (token) {
+                    headers['Authorization'] = `Bearer ${token}`;
+                }
+                
+                const result = await fetch(endpoint, { headers });
+                const data = await result.json();
+                
+                if (result.ok) {
+                    responseDiv.textContent = JSON.stringify(data, null, 2);
+                    responseDiv.classList.add('success');
+                    responseDiv.classList.remove('error');
+                } else {
+                    responseDiv.textContent = ' Erreur ' + result.status + '\n' + JSON.stringify(data, null, 2);
+                    responseDiv.classList.add('error');
+                    responseDiv.classList.remove('success');
+                }
+            } catch (error) {
+                responseDiv.textContent = ' Erreur: ' + error.message;
+                responseDiv.classList.add('error');
+                responseDiv.classList.remove('success');
+            }
+        }
+        
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tab).classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        function updateCadastreInfo() {
+            const endpoint = document.getElementById('cadastreEndpoint').value;
+            testEndpoint(endpoint);
+        }
+        
+        // Vérifier la connexion du serveur
+        window.addEventListener('load', async () => {
+            try {
+                const result = await fetch('/api');
+                if (result.ok) {
+                    document.getElementById('statusBadge').textContent = ' Online';
+                }
+            } catch (e) {
+                document.getElementById('statusBadge').textContent = ' Offline';
+                document.getElementById('statusBadge').classList.add('error');
+            }
+        });
+    </script>
+</body>
+</html>
