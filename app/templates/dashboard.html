@@ -1,599 +1,599 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - SIG Litiges Fonciers</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #667eea;
-            --secondary: #764ba2;
-            --success: #27ae60;
-            --danger: #e74c3c;
-            --warning: #f39c12;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            background: #f5f7fa;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        /* Navbar */
-        .navbar {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            padding: 1rem 2rem;
-        }
-        
-        .navbar-brand {
-            font-weight: 700;
-            font-size: 1.5em;
-            color: white !important;
-        }
-        
-        .nav-link {
-            color: rgba(255,255,255,0.8) !important;
-            transition: all 0.3s;
-        }
-        
-        .nav-link:hover {
-            color: white !important;
-            background: rgba(255,255,255,0.1);
-            border-radius: 5px;
-        }
-        
-        .user-info {
-            color: white;
-            font-size: 0.9em;
-        }
-        
-        /* Sidebar */
-        .sidebar {
-            background: white;
-            height: 100vh;
-            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.08);
-            padding: 2rem 0;
-            position: fixed;
-            width: 250px;
-            z-index: 100;
-        }
-        
-        .sidebar .nav-link {
-            color: #666;
-            padding: 0.8rem 1.5rem;
-            border-left: 3px solid transparent;
-            transition: all 0.3s;
-        }
-        
-        .sidebar .nav-link:hover,
-        .sidebar .nav-link.active {
-            background: #f8f9fa;
-            color: var(--primary);
-            border-left-color: var(--primary);
-        }
-        
-        .sidebar .nav-section-title {
-            font-size: 0.75em;
-            text-transform: uppercase;
-            color: #999;
-            padding: 1rem 1.5rem 0.5rem;
-            font-weight: 600;
-        }
-        
-        /* Main content */
-        .main-content {
-            margin-left: 250px;
-            padding: 2rem;
-        }
-        
-        .page-header {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            margin-bottom: 2rem;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
-        }
-        
-        .page-header h1 {
-            color: #333;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-        
-        .page-header .breadcrumb {
-            margin-bottom: 0;
-        }
-        
-        /* Cards */
-        .card {
-            border: none;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s;
-            margin-bottom: 1.5rem;
-        }
-        
-        .card:hover {
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-            transform: translateY(-2px);
-        }
-        
-        .card-header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: white;
-            border: none;
-            padding: 1.5rem;
-            font-weight: 600;
-        }
-        
-        /* Stats */
-        .stat-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            border-left: 4px solid var(--primary);
-            margin-bottom: 1.5rem;
-        }
-        
-        .stat-icon {
-            font-size: 2em;
-            margin-bottom: 1rem;
-        }
-        
-        .stat-number {
-            font-size: 2.2em;
-            font-weight: 700;
-            color: #333;
-        }
-        
-        .stat-label {
-            color: #999;
-            font-size: 0.9em;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        /* Table */
-        .table {
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        
-        .table thead {
-            background: #f8f9fa;
-        }
-        
-        .table th {
-            border: none;
-            font-weight: 600;
-            color: #666;
-            padding: 1rem;
-        }
-        
-        .table td {
-            padding: 1rem;
-            border: none;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        
-        /* Badges */
-        .badge {
-            padding: 0.4em 0.8em;
-            border-radius: 4px;
-            font-weight: 600;
-            font-size: 0.85em;
-        }
-        
-        .badge-success { background: var(--success); color: white; }
-        .badge-danger { background: var(--danger); color: white; }
-        .badge-warning { background: var(--warning); color: white; }
-        .badge-info { background: var(--primary); color: white; }
-        
-        /* Buttons */
-        .btn {
-            border-radius: 6px;
-            font-weight: 600;
-            padding: 0.6rem 1.2rem;
-            transition: all 0.3s;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            border: none;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-        }
-        
-        /* Map */
-        #map {
-            height: 500px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            margin-bottom: 2rem;
-        }
-        
-        /* Alerts */
-        .alert-custom {
-            background: white;
-            border-left: 4px solid var(--primary);
-            padding: 1.5rem;
-            border-radius: 6px;
-            margin-bottom: 1rem;
-        }
-        
-        .alert-custom.danger {
-            border-left-color: var(--danger);
-        }
-        
-        .alert-custom.warning {
-            border-left-color: var(--warning);
-        }
-        
-        /* Loading */
-        .loading {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            border: 2px solid #f3f3f3;
-            border-top: 2px solid var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-right: 0.5rem;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
-            }
-            
-            .main-content {
-                margin-left: 0;
-            }
-        }
-    </style>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Dashboard - SIG Litiges Fonciers</title>
+ <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+ <link href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet">
+ <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+ <style>
+ :root {
+ --primary: #667eea;
+ --secondary: #764ba2;
+ --success: #27ae60;
+ --danger: #e74c3c;
+ --warning: #f39c12;
+ }
+ 
+ * {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ }
+ 
+ body {
+ background: #f5f7fa;
+ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+ }
+ 
+ /* Navbar */
+ .navbar {
+ background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+ box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+ padding: 1rem 2rem;
+ }
+ 
+ .navbar-brand {
+ font-weight: 700;
+ font-size: 1.5em;
+ color: white !important;
+ }
+ 
+ .nav-link {
+ color: rgba(255,255,255,0.8) !important;
+ transition: all 0.3s;
+ }
+ 
+ .nav-link:hover {
+ color: white !important;
+ background: rgba(255,255,255,0.1);
+ border-radius: 5px;
+ }
+ 
+ .user-info {
+ color: white;
+ font-size: 0.9em;
+ }
+ 
+ /* Sidebar */
+ .sidebar {
+ background: white;
+ height: 100vh;
+ box-shadow: 2px 0 8px rgba(0, 0, 0, 0.08);
+ padding: 2rem 0;
+ position: fixed;
+ width: 250px;
+ z-index: 100;
+ }
+ 
+ .sidebar .nav-link {
+ color: #666;
+ padding: 0.8rem 1.5rem;
+ border-left: 3px solid transparent;
+ transition: all 0.3s;
+ }
+ 
+ .sidebar .nav-link:hover,
+ .sidebar .nav-link.active {
+ background: #f8f9fa;
+ color: var(--primary);
+ border-left-color: var(--primary);
+ }
+ 
+ .sidebar .nav-section-title {
+ font-size: 0.75em;
+ text-transform: uppercase;
+ color: #999;
+ padding: 1rem 1.5rem 0.5rem;
+ font-weight: 600;
+ }
+ 
+ /* Main content */
+ .main-content {
+ margin-left: 250px;
+ padding: 2rem;
+ }
+ 
+ .page-header {
+ background: white;
+ padding: 2rem;
+ border-radius: 8px;
+ margin-bottom: 2rem;
+ box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+ }
+ 
+ .page-header h1 {
+ color: #333;
+ font-weight: 700;
+ margin-bottom: 0.5rem;
+ }
+ 
+ .page-header .breadcrumb {
+ margin-bottom: 0;
+ }
+ 
+ /* Cards */
+ .card {
+ border: none;
+ border-radius: 8px;
+ box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+ transition: all 0.3s;
+ margin-bottom: 1.5rem;
+ }
+ 
+ .card:hover {
+ box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+ transform: translateY(-2px);
+ }
+ 
+ .card-header {
+ background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+ color: white;
+ border: none;
+ padding: 1.5rem;
+ font-weight: 600;
+ }
+ 
+ /* Stats */
+ .stat-card {
+ background: white;
+ padding: 1.5rem;
+ border-radius: 8px;
+ box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+ border-left: 4px solid var(--primary);
+ margin-bottom: 1.5rem;
+ }
+ 
+ .stat-icon {
+ font-size: 2em;
+ margin-bottom: 1rem;
+ }
+ 
+ .stat-number {
+ font-size: 2.2em;
+ font-weight: 700;
+ color: #333;
+ }
+ 
+ .stat-label {
+ color: #999;
+ font-size: 0.9em;
+ text-transform: uppercase;
+ letter-spacing: 0.5px;
+ }
+ 
+ /* Table */
+ .table {
+ background: white;
+ border-radius: 8px;
+ overflow: hidden;
+ }
+ 
+ .table thead {
+ background: #f8f9fa;
+ }
+ 
+ .table th {
+ border: none;
+ font-weight: 600;
+ color: #666;
+ padding: 1rem;
+ }
+ 
+ .table td {
+ padding: 1rem;
+ border: none;
+ border-bottom: 1px solid #f0f0f0;
+ }
+ 
+ /* Badges */
+ .badge {
+ padding: 0.4em 0.8em;
+ border-radius: 4px;
+ font-weight: 600;
+ font-size: 0.85em;
+ }
+ 
+ .badge-success { background: var(--success); color: white; }
+ .badge-danger { background: var(--danger); color: white; }
+ .badge-warning { background: var(--warning); color: white; }
+ .badge-info { background: var(--primary); color: white; }
+ 
+ /* Buttons */
+ .btn {
+ border-radius: 6px;
+ font-weight: 600;
+ padding: 0.6rem 1.2rem;
+ transition: all 0.3s;
+ }
+ 
+ .btn-primary {
+ background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+ border: none;
+ }
+ 
+ .btn-primary:hover {
+ transform: translateY(-2px);
+ box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+ }
+ 
+ /* Map */
+ #map {
+ height: 500px;
+ border-radius: 8px;
+ box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+ margin-bottom: 2rem;
+ }
+ 
+ /* Alerts */
+ .alert-custom {
+ background: white;
+ border-left: 4px solid var(--primary);
+ padding: 1.5rem;
+ border-radius: 6px;
+ margin-bottom: 1rem;
+ }
+ 
+ .alert-custom.danger {
+ border-left-color: var(--danger);
+ }
+ 
+ .alert-custom.warning {
+ border-left-color: var(--warning);
+ }
+ 
+ /* Loading */
+ .loading {
+ display: inline-block;
+ width: 12px;
+ height: 12px;
+ border: 2px solid #f3f3f3;
+ border-top: 2px solid var(--primary);
+ border-radius: 50%;
+ animation: spin 1s linear infinite;
+ margin-right: 0.5rem;
+ }
+ 
+ @keyframes spin {
+ 0% { transform: rotate(0deg); }
+ 100% { transform: rotate(360deg); }
+ }
+ 
+ @media (max-width: 768px) {
+ .sidebar {
+ width: 100%;
+ height: auto;
+ position: relative;
+ }
+ 
+ .main-content {
+ margin-left: 0;
+ }
+ }
+ </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">
-                <i class="fas fa-map"></i> SIG Litiges Fonciers
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <span class="user-info">
-                            <i class="fas fa-user-circle"></i>
-                            <span id="userDisplay">Connexion requise</span>
-                        </span>
-                    </li>
-                    <li class="nav-item">
-                        <button class="btn btn-sm btn-light" onclick="logout()">
-                            <i class="fas fa-sign-out-alt"></i> Déconnexion
-                        </button>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    
-    <div class="d-flex">
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <div class="nav flex-column">
-                <div class="nav-section-title">Menu Principal</div>
-                
-                <!-- Admin Menu -->
-                <div id="adminMenu" style="display:none;">
-                    <a class="nav-link active" href="#dashboard" onclick="loadSection('dashboard')">
-                        <i class="fas fa-chart-line"></i> Dashboard
-                    </a>
-                    <a class="nav-link" href="#utilisateurs" onclick="loadSection('utilisateurs')">
-                        <i class="fas fa-users"></i> Utilisateurs
-                    </a>
-                    <a class="nav-link" href="#parametres" onclick="loadSection('parametres')">
-                        <i class="fas fa-cog"></i> Paramètres
-                    </a>
-                </div>
-                
-                <!-- Cadastre Menu -->
-                <div id="cadastreMenu" style="display:none;">
-                    <a class="nav-link active" href="#carte" onclick="loadSection('carte')">
-                        <i class="fas fa-map"></i> Carte Foncière
-                    </a>
-                    <a class="nav-link" href="#parcelles" onclick="loadSection('parcelles')">
-                        <i class="fas fa-home"></i> Parcelles
-                    </a>
-                    <a class="nav-link" href="#recherche" onclick="loadSection('recherche')">
-                        <i class="fas fa-search"></i> Recherche
-                    </a>
-                </div>
-                
-                <!-- Judiciaire Menu -->
-                <div id="judiciairemenu" style="display:none;">
-                    <a class="nav-link active" href="#litiges" onclick="loadSection('litiges')">
-                        <i class="fas fa-gavel"></i> Litiges
-                    </a>
-                    <a class="nav-link" href="#alertes" onclick="loadSection('alertes')">
-                        <i class="fas fa-bell"></i> Alertes
-                    </a>
-                    <a class="nav-link" href="#dossiers" onclick="loadSection('dossiers')">
-                        <i class="fas fa-folder"></i> Dossiers
-                    </a>
-                </div>
-                
-                <!-- Collectivité Menu -->
-                <div id="collectiviteMenu" style="display:none;">
-                    <a class="nav-link active" href="#carteglobal" onclick="loadSection('carteglobal')">
-                        <i class="fas fa-map-marked-alt"></i> Carte Globale
-                    </a>
-                    <a class="nav-link" href="#riskmap" onclick="loadSection('riskmap')">
-                        <i class="fas fa-exclamation-triangle"></i> Zones à Risque
-                    </a>
-                    <a class="nav-link" href="#stats" onclick="loadSection('stats')">
-                        <i class="fas fa-chart-pie"></i> Statistiques
-                    </a>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Main Content -->
-        <div class="main-content">
-            <div class="page-header">
-                <h1><span id="pageTitle">Bienvenue</span></h1>
-                <p id="pageSubtitle">Système d'Information Géographique pour les Litiges Fonciers</p>
-            </div>
-            
-            <div id="content-container">
-                <!-- Sera rempli dynamiquement -->
-                <div class="card">
-                    <div class="card-body text-center py-5">
-                        <div class="loading" style="display: inline-block;"></div>
-                        <p>Veuillez vous connecter...</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script>
-        let token = localStorage.getItem('api_token');
-        let userRole = localStorage.getItem('user_role');
-        let userName = localStorage.getItem('user_name');
-        
-        // Rediriger si pas connecté
-        if (!token) {
-            window.location.href = '/';
-        }
-        
-        // Afficher les infos utilisateur
-        document.getElementById('userDisplay').textContent = userName || 'Utilisateur';
-        
-        // Afficher le menu correspondant
-        if (userRole === 'admin') {
-            document.getElementById('adminMenu').style.display = 'block';
-            loadSection('dashboard');
-        } else if (userRole === 'agent_cadastre') {
-            document.getElementById('cadastreMenu').style.display = 'block';
-            loadSection('carte');
-        } else if (userRole === 'agent_judiciaire') {
-            document.getElementById('judiciairemenu').style.display = 'block';
-            loadSection('litiges');
-        } else if (userRole === 'collectivite') {
-            document.getElementById('collectiviteMenu').style.display = 'block';
-            loadSection('carteglobal');
-        }
-        
-        async function loadSection(section) {
-            document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
-            event.target.closest('.nav-link').classList.add('active');
-            
-            const content = document.getElementById('content-container');
-            content.innerHTML = '<div class="card"><div class="card-body text-center py-5"><div class="loading"></div><p>Chargement...</p></div></div>';
-            
-            try {
-                const response = await fetch(`/api/admin/dashboard`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                
-                const data = await response.json();
-                
-                if (section === 'dashboard' || section === 'carte' || section === 'litiges' || section === 'carteglobal') {
-                    document.getElementById('pageTitle').textContent = 'Dashboard';
-                    content.innerHTML = `
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="stat-card">
-                                    <div class="stat-icon"></div>
-                                    <div class="stat-number" id="stat-users">0</div>
-                                    <div class="stat-label">Utilisateurs</div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="stat-card" style="border-left-color: #f39c12;">
-                                    <div class="stat-icon"></div>
-                                    <div class="stat-number" id="stat-parcelles">0</div>
-                                    <div class="stat-label">Parcelles</div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="stat-card" style="border-left-color: #e74c3c;">
-                                    <div class="stat-icon">️</div>
-                                    <div class="stat-number" id="stat-litiges">0</div>
-                                    <div class="stat-label">Litiges</div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="stat-card" style="border-left-color: #27ae60;">
-                                    <div class="stat-icon"></div>
-                                    <div class="stat-number" id="stat-alertes">0</div>
-                                    <div class="stat-label">Alertes</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="card">
-                            <div class="card-header">
-                                <i class="fas fa-map"></i> Carte Interactive
-                            </div>
-                            <div class="card-body">
-                                <div id="map"></div>
-                                <p class="text-muted mt-3">Carte affichant les parcelles et litiges</p>
-                            </div>
-                        </div>
-                    `;
-                    
-                    // Initialiser la carte
-                    if (!window.mapInitialized) {
-                        setTimeout(() => {
-                            const map = L.map('map').setView([6.125, 1.232], 8);
-                            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-                            window.mapInitialized = true;
-                        }, 100);
-                    }
-                }
-                
-                // Charger les stats
-                if (data.stats) {
-                    document.getElementById('stat-users').textContent = data.stats.users || 0;
-                    document.getElementById('stat-parcelles').textContent = data.stats.parcelles || 0;
-                    document.getElementById('stat-litiges').textContent = data.stats.litiges || 0;
-                    document.getElementById('stat-alertes').textContent = data.stats.alertes || 0;
-                }
-            } catch (error) {
-                content.innerHTML = `
-                    <div class="alert alert-danger">
-                        <i class="fas fa-exclamation-circle"></i> Erreur: ${error.message}
-                    </div>
-                `;
-            }
-        }
-        
-        async function logout() {
-            console.log('Début déconnexion...');
-            try {
-                const token = localStorage.getItem('api_token');
-                console.log('Token trouvé:', !!token);
-                
-                if (token) {
-                    console.log('Envoi requête logout...');
-                    const response = await fetch('/api/auth/logout', {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json'
-                        }
-                    });
-                    console.log('Réponse logout:', response.status);
-                }
-                
-                console.log('Effacement du localStorage...');
-                localStorage.clear();
-                sessionStorage.clear();
-                
-                console.log('Redirection vers /');
-                window.location.href = '/';
-            } catch (error) {
-                console.error('Erreur déconnexion:', error);
-                localStorage.clear();
-                sessionStorage.clear();
-                window.location.href = '/';
-            }
-        }
-    </script>
+ <!-- Navbar -->
+ <nav class="navbar navbar-expand-lg navbar-dark">
+ <div class="container-fluid">
+ <a class="navbar-brand" href="/">
+ <i class="fas fa-map"></i> SIG Litiges Fonciers
+ </a>
+ <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="navbarNav">
+ <ul class="navbar-nav ms-auto">
+ <li class="nav-item">
+ <span class="user-info">
+ <i class="fas fa-user-circle"></i>
+ <span id="userDisplay">Connexion requise</span>
+ </span>
+ </li>
+ <li class="nav-item">
+ <button class="btn btn-sm btn-light" onclick="logout()">
+ <i class="fas fa-sign-out-alt"></i> Déconnexion
+ </button>
+ </li>
+ </ul>
+ </div>
+ </div>
+ </nav>
+ 
+ <div class="d-flex">
+ <!-- Sidebar -->
+ <div class="sidebar">
+ <div class="nav flex-column">
+ <div class="nav-section-title">Menu Principal</div>
+ 
+ <!-- Admin Menu -->
+ <div id="adminMenu" style="display:none;">
+ <a class="nav-link active" href="#dashboard" onclick="loadSection('dashboard')">
+ <i class="fas fa-chart-line"></i> Dashboard
+ </a>
+ <a class="nav-link" href="#utilisateurs" onclick="loadSection('utilisateurs')">
+ <i class="fas fa-users"></i> Utilisateurs
+ </a>
+ <a class="nav-link" href="#parametres" onclick="loadSection('parametres')">
+ <i class="fas fa-cog"></i> Paramètres
+ </a>
+ </div>
+ 
+ <!-- Cadastre Menu -->
+ <div id="cadastreMenu" style="display:none;">
+ <a class="nav-link active" href="#carte" onclick="loadSection('carte')">
+ <i class="fas fa-map"></i> Carte Foncière
+ </a>
+ <a class="nav-link" href="#parcelles" onclick="loadSection('parcelles')">
+ <i class="fas fa-home"></i> Parcelles
+ </a>
+ <a class="nav-link" href="#recherche" onclick="loadSection('recherche')">
+ <i class="fas fa-search"></i> Recherche
+ </a>
+ </div>
+ 
+ <!-- Judiciaire Menu -->
+ <div id="judiciairemenu" style="display:none;">
+ <a class="nav-link active" href="#litiges" onclick="loadSection('litiges')">
+ <i class="fas fa-gavel"></i> Litiges
+ </a>
+ <a class="nav-link" href="#alertes" onclick="loadSection('alertes')">
+ <i class="fas fa-bell"></i> Alertes
+ </a>
+ <a class="nav-link" href="#dossiers" onclick="loadSection('dossiers')">
+ <i class="fas fa-folder"></i> Dossiers
+ </a>
+ </div>
+ 
+ <!-- Collectivité Menu -->
+ <div id="collectiviteMenu" style="display:none;">
+ <a class="nav-link active" href="#carteglobal" onclick="loadSection('carteglobal')">
+ <i class="fas fa-map-marked-alt"></i> Carte Globale
+ </a>
+ <a class="nav-link" href="#riskmap" onclick="loadSection('riskmap')">
+ <i class="fas fa-exclamation-triangle"></i> Zones à Risque
+ </a>
+ <a class="nav-link" href="#stats" onclick="loadSection('stats')">
+ <i class="fas fa-chart-pie"></i> Statistiques
+ </a>
+ </div>
+ </div>
+ </div>
+ 
+ <!-- Main Content -->
+ <div class="main-content">
+ <div class="page-header">
+ <h1><span id="pageTitle">Bienvenue</span></h1>
+ <p id="pageSubtitle">Système d'Information Géographique pour les Litiges Fonciers</p>
+ </div>
+ 
+ <div id="content-container">
+ <!-- Sera rempli dynamiquement -->
+ <div class="card">
+ <div class="card-body text-center py-5">
+ <div class="loading" style="display: inline-block;"></div>
+ <p>Veuillez vous connecter...</p>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+ <script>
+ let token = localStorage.getItem('api_token');
+ let userRole = localStorage.getItem('user_role');
+ let userName = localStorage.getItem('user_name');
+ 
+ // Rediriger si pas connecté
+ if (!token) {
+ window.location.href = '/';
+ }
+ 
+ // Afficher les infos utilisateur
+ document.getElementById('userDisplay').textContent = userName || 'Utilisateur';
+ 
+ // Afficher le menu correspondant
+ if (userRole === 'admin') {
+ document.getElementById('adminMenu').style.display = 'block';
+ loadSection('dashboard');
+ } else if (userRole === 'agent_cadastre') {
+ document.getElementById('cadastreMenu').style.display = 'block';
+ loadSection('carte');
+ } else if (userRole === 'agent_judiciaire') {
+ document.getElementById('judiciairemenu').style.display = 'block';
+ loadSection('litiges');
+ } else if (userRole === 'collectivite') {
+ document.getElementById('collectiviteMenu').style.display = 'block';
+ loadSection('carteglobal');
+ }
+ 
+ async function loadSection(section) {
+ document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+ event.target.closest('.nav-link').classList.add('active');
+ 
+ const content = document.getElementById('content-container');
+ content.innerHTML = '<div class="card"><div class="card-body text-center py-5"><div class="loading"></div><p>Chargement...</p></div></div>';
+ 
+ try {
+ const response = await fetch(`/api/admin/dashboard`, {
+ headers: { 'Authorization': `Bearer ${token}` }
+ });
+ 
+ const data = await response.json();
+ 
+ if (section === 'dashboard' || section === 'carte' || section === 'litiges' || section === 'carteglobal') {
+ document.getElementById('pageTitle').textContent = 'Dashboard';
+ content.innerHTML = `
+ <div class="row">
+ <div class="col-md-3">
+ <div class="stat-card">
+ <div class="stat-icon"></div>
+ <div class="stat-number" id="stat-users">0</div>
+ <div class="stat-label">Utilisateurs</div>
+ </div>
+ </div>
+ <div class="col-md-3">
+ <div class="stat-card" style="border-left-color: #f39c12;">
+ <div class="stat-icon"></div>
+ <div class="stat-number" id="stat-parcelles">0</div>
+ <div class="stat-label">Parcelles</div>
+ </div>
+ </div>
+ <div class="col-md-3">
+ <div class="stat-card" style="border-left-color: #e74c3c;">
+ <div class="stat-icon"></div>
+ <div class="stat-number" id="stat-litiges">0</div>
+ <div class="stat-label">Litiges</div>
+ </div>
+ </div>
+ <div class="col-md-3">
+ <div class="stat-card" style="border-left-color: #27ae60;">
+ <div class="stat-icon"></div>
+ <div class="stat-number" id="stat-alertes">0</div>
+ <div class="stat-label">Alertes</div>
+ </div>
+ </div>
+ </div>
+ 
+ <div class="card">
+ <div class="card-header">
+ <i class="fas fa-map"></i> Carte Interactive
+ </div>
+ <div class="card-body">
+ <div id="map"></div>
+ <p class="text-muted mt-3">Carte affichant les parcelles et litiges</p>
+ </div>
+ </div>
+ `;
+ 
+ // Initialiser la carte
+ if (!window.mapInitialized) {
+ setTimeout(() => {
+ const map = L.map('map').setView([6.125, 1.232], 8);
+ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+ window.mapInitialized = true;
+ }, 100);
+ }
+ }
+ 
+ // Charger les stats
+ if (data.stats) {
+ document.getElementById('stat-users').textContent = data.stats.users || 0;
+ document.getElementById('stat-parcelles').textContent = data.stats.parcelles || 0;
+ document.getElementById('stat-litiges').textContent = data.stats.litiges || 0;
+ document.getElementById('stat-alertes').textContent = data.stats.alertes || 0;
+ }
+ } catch (error) {
+ content.innerHTML = `
+ <div class="alert alert-danger">
+ <i class="fas fa-exclamation-circle"></i> Erreur: ${error.message}
+ </div>
+ `;
+ }
+ }
+ 
+ async function logout() {
+ console.log('Début déconnexion...');
+ try {
+ const token = localStorage.getItem('api_token');
+ console.log('Token trouvé:', !!token);
+ 
+ if (token) {
+ console.log('Envoi requête logout...');
+ const response = await fetch('/api/auth/logout', {
+ method: 'POST',
+ headers: {
+ 'Authorization': `Bearer ${token}`,
+ 'Content-Type': 'application/json'
+ }
+ });
+ console.log('Réponse logout:', response.status);
+ }
+ 
+ console.log('Effacement du localStorage...');
+ localStorage.clear();
+ sessionStorage.clear();
+ 
+ console.log('Redirection vers /');
+ window.location.href = '/';
+ } catch (error) {
+ console.error('Erreur déconnexion:', error);
+ localStorage.clear();
+ sessionStorage.clear();
+ window.location.href = '/';
+ }
+ }
+ </script>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="row">
-                <!-- À propos -->
-                <div class="col-md-3 footer-section">
-                    <h5><i class="fas fa-globe"></i> SIG Litiges</h5>
-                    <p>Système d'information géographique pour la gestion des litiges fonciers au Togo. Facilitant la collaboration entre les différents acteurs.</p>
-                    <div class="footer-social">
-                        <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
-                        <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#" title="Email"><i class="fas fa-envelope"></i></a>
-                    </div>
-                </div>
-                
-                <!-- Liens utiles -->
-                <div class="col-md-3 footer-section">
-                    <h5>Liens Utiles</h5>
-                    <ul>
-                        <li><a href="#dashboard" onclick="showDashboard()">Dashboard</a></li>
-                        <li><a href="#parcelles" onclick="showParcelles()">Parcelles</a></li>
-                        <li><a href="#litiges" onclick="showLitiges()">Litiges</a></li>
-                        <li><a href="#alertes" onclick="showAlertes()">Alertes</a></li>
-                    </ul>
-                </div>
-                
-                <!-- Documentation -->
-                <div class="col-md-3 footer-section">
-                    <h5>Documentation</h5>
-                    <ul>
-                        <li><a href="/docs/guide">Guide Utilisateur</a></li>
-                        <li><a href="/docs/api">Documentation API</a></li>
-                        <li><a href="/docs/faq">FAQ</a></li>
-                        <li><a href="/docs/support">Support</a></li>
-                    </ul>
-                </div>
-                
-                <!-- Contact -->
-                <div class="col-md-3 footer-section">
-                    <h5>Contact</h5>
-                    <p>
-                        <i class="fas fa-map-marker-alt"></i> Lomé, Togo<br>
-                        <i class="fas fa-phone"></i> +228 XXXX XXXX<br>
-                        <i class="fas fa-envelope"></i> <a href="mailto:info@sig-litiges.tg">info@sig-litiges.tg</a>
-                    </p>
-                </div>
-            </div>
-            
-            <div class="footer-divider"></div>
-            
-            <!-- Bas de page -->
-            <div class="footer-bottom">
-                <div>
-                    <p>&copy; 2026 Système d'Alerte SIG - Litiges Fonciers Togo. Tous droits réservés.</p>
-                </div>
-                <div>
-                    <a href="#" style="color: rgba(255, 255, 255, 0.7); margin: 0 1rem;">Conditions</a>
-                    <a href="#" style="color: rgba(255, 255, 255, 0.7); margin: 0 1rem;">Confidentialité</a>
-                    <a href="#" style="color: rgba(255, 255, 255, 0.7); margin: 0 1rem;">Mentions légales</a>
-                </div>
-            </div>
-        </div>
-    </footer>
+ <!-- Footer -->
+ <footer>
+ <div class="container">
+ <div class="row">
+ <!-- À propos -->
+ <div class="col-md-3 footer-section">
+ <h5><i class="fas fa-globe"></i> SIG Litiges</h5>
+ <p>Système d'information géographique pour la gestion des litiges fonciers au Togo. Facilitant la collaboration entre les différents acteurs.</p>
+ <div class="footer-social">
+ <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+ <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+ <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+ <a href="#" title="Email"><i class="fas fa-envelope"></i></a>
+ </div>
+ </div>
+ 
+ <!-- Liens utiles -->
+ <div class="col-md-3 footer-section">
+ <h5>Liens Utiles</h5>
+ <ul>
+ <li><a href="#dashboard" onclick="showDashboard()">Dashboard</a></li>
+ <li><a href="#parcelles" onclick="showParcelles()">Parcelles</a></li>
+ <li><a href="#litiges" onclick="showLitiges()">Litiges</a></li>
+ <li><a href="#alertes" onclick="showAlertes()">Alertes</a></li>
+ </ul>
+ </div>
+ 
+ <!-- Documentation -->
+ <div class="col-md-3 footer-section">
+ <h5>Documentation</h5>
+ <ul>
+ <li><a href="/docs/guide">Guide Utilisateur</a></li>
+ <li><a href="/docs/api">Documentation API</a></li>
+ <li><a href="/docs/faq">FAQ</a></li>
+ <li><a href="/docs/support">Support</a></li>
+ </ul>
+ </div>
+ 
+ <!-- Contact -->
+ <div class="col-md-3 footer-section">
+ <h5>Contact</h5>
+ <p>
+ <i class="fas fa-map-marker-alt"></i> Lomé, Togo<br>
+ <i class="fas fa-phone"></i> +228 XXXX XXXX<br>
+ <i class="fas fa-envelope"></i> <a href="mailto:info@sig-litiges.tg">info@sig-litiges.tg</a>
+ </p>
+ </div>
+ </div>
+ 
+ <div class="footer-divider"></div>
+ 
+ <!-- Bas de page -->
+ <div class="footer-bottom">
+ <div>
+ <p>&copy; 2026 Système d'Alerte SIG - Litiges Fonciers Togo. Tous droits réservés.</p>
+ </div>
+ <div>
+ <a href="#" style="color: rgba(255, 255, 255, 0.7); margin: 0 1rem;">Conditions</a>
+ <a href="#" style="color: rgba(255, 255, 255, 0.7); margin: 0 1rem;">Confidentialité</a>
+ <a href="#" style="color: rgba(255, 255, 255, 0.7); margin: 0 1rem;">Mentions légales</a>
+ </div>
+ </div>
+ </div>
+ </footer>
 
-    <!-- Include Footer CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+ <!-- Include Footer CSS -->
+ <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </body>
 </html>

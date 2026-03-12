@@ -219,6 +219,60 @@ def lister_litiges():
     }), 200
 
 
+@litige_bp.route('/alerte-cadastre', methods=['POST'])
+@jwt_required()
+def envoyer_alerte_cadastre():
+    """
+    Envoyer une alerte à l'agent du cadastre depuis l'agent judiciaire
+    """
+    user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+
+    if not user or user.role.nom != 'agent_judiciaire':
+        return jsonify({'message': 'Accès refusé'}), 403
+
+    data = request.get_json()
+
+    required_fields = ['parcelle_id', 'message', 'type_alerte']
+    if not all(k in data for k in required_fields):
+        return jsonify({'message': 'Champs requis : parcelle_id, message, type_alerte'}), 400
+
+    # Vérifier la parcelle
+    parcelle = Parcelle.query.get(data['parcelle_id'])
+    if not parcelle:
+        return jsonify({'message': 'Parcelle non trouvée'}), 404
+
+    # Trouver le litige lié à la parcelle (le plus récent ouvert)
+    litige = Litige.query.filter(
+        Litige.parcelle_id == parcelle.id,
+        Litige.statut.in_(['ouvert', 'en_cours'])
+    ).order_by(Litige.date_enregistrement.desc()).first()
+
+    if not litige:
+        # Créer une alerte sans lien litige direct n'est pas supporté par le modèle,
+        # on retourne une erreur explicite
+        return jsonify({'message': 'Aucun litige actif trouvé pour cette parcelle. Enregistrez d\'abord un litige.'}), 400
+
+    alerte = AlerteLitige(
+        parcelle_id=parcelle.id,
+        litige_id=litige.id,
+        type_alerte=data['type_alerte'],
+        message=data['message'],
+        priorite=data.get('priorite', 'haute'),
+        active=True
+    )
+    db.session.add(alerte)
+    db.session.commit()
+
+    return jsonify({
+        'message': 'Alerte envoyée à l\'agent du cadastre avec succès',
+        'alerte_id': alerte.id,
+        'parcelle': parcelle.numero_parcelle,
+        'litige_numero': litige.numero_dossier,
+        'priorite': alerte.priorite
+    }), 201
+
+
 @litige_bp.route('/alerte/<int:alerte_id>', methods=['PUT'])
 @jwt_required()
 def resoudre_alerte(alerte_id):

@@ -1,369 +1,369 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Collectivité - SIG Litiges Fonciers</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f5f7fa;
-        }
-        
-        .navbar {
-            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
-            color: white;
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-        
-        .navbar h1 {
-            font-size: 1.5em;
-            font-weight: 700;
-        }
-        
-        .logout-btn {
-            background: #dc2626;
-            color: white;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            white-space: nowrap;
-        }
-        
-        .logout-btn:hover {
-            background: #991b1b;
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-        
-        h2 {
-            color: #333;
-            margin-bottom: 25px;
-            font-size: 1.8em;
-        }
-        
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-        
-        .stat {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        }
-        
-        .stat-number {
-            font-size: 2.5em;
-            font-weight: 700;
-            color: #2563eb;
-        }
-        
-        .stat-label {
-            color: #999;
-            margin-top: 10px;
-        }
-        
-        .tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-            border-bottom: 2px solid #e0e0e0;
-        }
-        
-        .tab {
-            padding: 12px 24px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            color: #666;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s;
-        }
-        
-        .tab:hover {
-            color: #2563eb;
-        }
-        
-        .tab.active {
-            color: #2563eb;
-            border-bottom-color: #2563eb;
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        .card {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            padding: 25px;
-            margin-bottom: 25px;
-        }
-        
-        .card-header {
-            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
-            color: white;
-            padding: 20px;
-            font-weight: 600;
-            margin: -25px -25px 20px -25px;
-            border-radius: 8px 8px 0 0;
-        }
-        
-        .alert-box {
-            background: #fef3c7;
-            border-left: 4px solid #f59e0b;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 4px;
-        }
-        
-        .alert-box.high {
-            background: #fee2e2;
-            border-left-color: #ef4444;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        th {
-            background: #f8f9fa;
-            padding: 12px;
-            text-align: left;
-            font-weight: 600;
-            color: #666;
-            border-bottom: 2px solid #e0e0e0;
-        }
-        
-        td {
-            padding: 12px;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        
-        .badge {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.85em;
-            background: #dbeafe;
-            color: #1e40af;
-        }
-        
-        .badge.risk {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-    </style>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Dashboard Collectivité - SIG Litiges Fonciers</title>
+ <style>
+ * {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ }
+ 
+ body {
+ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+ background: #f5f7fa;
+ }
+ 
+ .navbar {
+ background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+ color: white;
+ padding: 20px 40px;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+ }
+ 
+ .navbar h1 {
+ font-size: 1.5em;
+ font-weight: 700;
+ }
+ 
+ .logout-btn {
+ background: #dc2626;
+ color: white;
+ padding: 8px 16px;
+ border: none;
+ border-radius: 6px;
+ cursor: pointer;
+ font-weight: 600;
+ white-space: nowrap;
+ }
+ 
+ .logout-btn:hover {
+ background: #991b1b;
+ }
+ 
+ .container {
+ max-width: 1400px;
+ margin: 0 auto;
+ padding: 40px 20px;
+ }
+ 
+ h2 {
+ color: #333;
+ margin-bottom: 25px;
+ font-size: 1.8em;
+ }
+ 
+ .stats {
+ display: grid;
+ grid-template-columns: repeat(3, 1fr);
+ gap: 20px;
+ margin-bottom: 40px;
+ }
+ 
+ .stat {
+ background: white;
+ padding: 20px;
+ border-radius: 8px;
+ text-align: center;
+ box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+ }
+ 
+ .stat-number {
+ font-size: 2.5em;
+ font-weight: 700;
+ color: #2563eb;
+ }
+ 
+ .stat-label {
+ color: #999;
+ margin-top: 10px;
+ }
+ 
+ .tabs {
+ display: flex;
+ gap: 10px;
+ margin-bottom: 25px;
+ border-bottom: 2px solid #e0e0e0;
+ }
+ 
+ .tab {
+ padding: 12px 24px;
+ background: none;
+ border: none;
+ cursor: pointer;
+ font-weight: 600;
+ color: #666;
+ border-bottom: 3px solid transparent;
+ transition: all 0.3s;
+ }
+ 
+ .tab:hover {
+ color: #2563eb;
+ }
+ 
+ .tab.active {
+ color: #2563eb;
+ border-bottom-color: #2563eb;
+ }
+ 
+ .tab-content {
+ display: none;
+ }
+ 
+ .tab-content.active {
+ display: block;
+ }
+ 
+ .card {
+ background: white;
+ border-radius: 8px;
+ box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+ padding: 25px;
+ margin-bottom: 25px;
+ }
+ 
+ .card-header {
+ background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+ color: white;
+ padding: 20px;
+ font-weight: 600;
+ margin: -25px -25px 20px -25px;
+ border-radius: 8px 8px 0 0;
+ }
+ 
+ .alert-box {
+ background: #fef3c7;
+ border-left: 4px solid #f59e0b;
+ padding: 15px;
+ margin-bottom: 15px;
+ border-radius: 4px;
+ }
+ 
+ .alert-box.high {
+ background: #fee2e2;
+ border-left-color: #ef4444;
+ }
+ 
+ table {
+ width: 100%;
+ border-collapse: collapse;
+ }
+ 
+ th {
+ background: #f8f9fa;
+ padding: 12px;
+ text-align: left;
+ font-weight: 600;
+ color: #666;
+ border-bottom: 2px solid #e0e0e0;
+ }
+ 
+ td {
+ padding: 12px;
+ border-bottom: 1px solid #f0f0f0;
+ }
+ 
+ .badge {
+ display: inline-block;
+ padding: 4px 8px;
+ border-radius: 4px;
+ font-size: 0.85em;
+ background: #dbeafe;
+ color: #1e40af;
+ }
+ 
+ .badge.risk {
+ background: #fee2e2;
+ color: #991b1b;
+ }
+ </style>
 </head>
 <body>
-    <div class="navbar">
-        <h1>️ SIG Litiges Fonciers - Collectivité Territoriale</h1>
-        <div style="display: flex; align-items: center; gap: 20px;">
-            <span id="userName"></span>
-            <button class="logout-btn" onclick="logout()">Déconnexion</button>
-        </div>
-    </div>
-    
-    <div class="container">
-        <h2> Suivi Territorial</h2>
-        
-        <div class="stats">
-            <div class="stat">
-                <div class="stat-number" id="alertesCount">0</div>
-                <div class="stat-label">Alertes Actives</div>
-            </div>
-            <div class="stat">
-                <div class="stat-number" id="parcellesCount">0</div>
-                <div class="stat-label">Parcelles à Risque</div>
-            </div>
-            <div class="stat">
-                <div class="stat-number" id="litigesCount">0</div>
-                <div class="stat-label">Litiges en Cours</div>
-            </div>
-        </div>
-        
-        <div class="tabs">
-            <button class="tab active" onclick="switchTab('alertes')">️ Alertes Actives</button>
-            <button class="tab" onclick="switchTab('arisque')"> Parcelles à Risque</button>
-            <button class="tab" onclick="switchTab('carte')">️ Carte Foncière</button>
-        </div>
-        
-        <!-- Onglet Alertes -->
-        <div id="alertes" class="tab-content active">
-            <div class="card">
-                <div class="card-header">️ Alertes et Notifications</div>
-                <div id="alertesBody">Chargement...</div>
-            </div>
-        </div>
-        
-        <!-- Onglet Parcelles à Risque -->
-        <div id="arisque" class="tab-content">
-            <div class="card">
-                <div class="card-header"> Parcelles à Risque (en contentieux)</div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Numéro Parcelle</th>
-                            <th>Propriétaire</th>
-                            <th>Commune</th>
-                            <th>Statut</th>
-                            <th>Litiges</th>
-                            <th>Superficie</th>
-                        </tr>
-                    </thead>
-                    <tbody id="parcellesBody">
-                        <tr><td colspan="6" style="text-align: center;">Chargement...</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        
-        <!-- Onglet Carte -->
-        <div id="carte" class="tab-content">
-            <div class="card">
-                <div class="card-header">️ Carte Foncière Interactive</div>
-                <div id="mapContainer" style="width: 100%; height: 500px; border: 1px solid #ddd; border-radius: 6px; background: #e5e7eb; display: flex; align-items: center; justify-content: center;">
-                    <p style="color: #666;">Carte Leaflet - À intégrer</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <script>
-        const token = localStorage.getItem('api_token');
-        if (!token) window.location.href = '/';
-        
-        document.getElementById('userName').textContent = localStorage.getItem('user_name') || 'Utilisateur';
-        
-        function switchTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
-            document.getElementById(tabName).classList.add('active');
-            event.target.classList.add('active');
-        }
-        
-        async function loadAlertes() {
-            try {
-                // Alertes génériques (modèle Alerte avec titre)
-                const res = await fetch('/api/collectivite/alertes-actives', {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                if (res.ok) {
-                    const data = await res.json();
-                    const alertes = data.alertes || [];
-                    document.getElementById('alertesCount').textContent = alertes.length;
-                    document.getElementById('alertesBody').innerHTML = alertes.map(a => `
-                        <div class="alert-box ${a.priorite === 'haute' ? 'high' : ''}">
-                            <strong>️ ${a.titre || a.type_alerte || 'ALERTE'}</strong><br>
-                            <p style="margin-top: 8px; color: #666;">${a.message || ''}</p>
-                            <small style="color: #999;">
-                                Priorité: <strong>${a.priorite}</strong>
-                                ${a.region ? ' | ' + a.region : ''}
-                                ${a.commune ? ' — ' + a.commune : ''}
-                                | ${a.date_creation ? new Date(a.date_creation).toLocaleDateString('fr-FR') : ''}
-                            </small>
-                        </div>
-                    `).join('') || '<p style="text-align: center; color: #999;">Pas d\'alertes actuellement</p>';
-                }
-            } catch (e) {
-                console.error(e);
-            }
-        }
-        
-        async function loadParcelles() {
-            try {
-                const res = await fetch('/api/collectivite/parcelles-a-risque', {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                if (res.ok) {
-                    const data = await res.json();
-                    const parcelles = data.parcelles || [];
-                    document.getElementById('parcellesCount').textContent = parcelles.length;
-                    document.getElementById('parcellesBody').innerHTML = parcelles.map(p => `
-                        <tr>
-                            <td><strong>${p.numero_parcelle}</strong></td>
-                            <td>${p.proprietaire || 'N/A'}</td>
-                            <td>${p.commune || 'N/A'}</td>
-                            <td><span class="badge risk">${p.statut}</span></td>
-                            <td>—</td>
-                            <td>${p.superficie ? p.superficie + ' m²' : 'N/A'}</td>
-                        </tr>
-                    `).join('') || '<tr><td colspan="6" style="text-align: center;">Aucune parcelle à risque</td></tr>';
-                }
-            } catch (e) {
-                console.error(e);
-            }
-        }
-        
-        async function loadLitiges() {
-            try {
-                const res = await fetch('/api/litige/litiges', {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                if (res.ok) {
-                    const data = await res.json();
-                    document.getElementById('litigesCount').textContent = data.count ?? (data.litiges || []).length;
-                }
-            } catch (e) {
-                console.error(e);
-            }
-        }
+ <div class="navbar">
+ <h1> SIG Litiges Fonciers - Collectivité Territoriale</h1>
+ <div style="display: flex; align-items: center; gap: 20px;">
+ <span id="userName"></span>
+ <button class="logout-btn" onclick="logout()">Déconnexion</button>
+ </div>
+ </div>
+ 
+ <div class="container">
+ <h2> Suivi Territorial</h2>
+ 
+ <div class="stats">
+ <div class="stat">
+ <div class="stat-number" id="alertesCount">0</div>
+ <div class="stat-label">Alertes Actives</div>
+ </div>
+ <div class="stat">
+ <div class="stat-number" id="parcellesCount">0</div>
+ <div class="stat-label">Parcelles à Risque</div>
+ </div>
+ <div class="stat">
+ <div class="stat-number" id="litigesCount">0</div>
+ <div class="stat-label">Litiges en Cours</div>
+ </div>
+ </div>
+ 
+ <div class="tabs">
+ <button class="tab active" onclick="switchTab('alertes')"> Alertes Actives</button>
+ <button class="tab" onclick="switchTab('arisque')"> Parcelles à Risque</button>
+ <button class="tab" onclick="switchTab('carte')"> Carte Foncière</button>
+ </div>
+ 
+ <!-- Onglet Alertes -->
+ <div id="alertes" class="tab-content active">
+ <div class="card">
+ <div class="card-header"> Alertes et Notifications</div>
+ <div id="alertesBody">Chargement...</div>
+ </div>
+ </div>
+ 
+ <!-- Onglet Parcelles à Risque -->
+ <div id="arisque" class="tab-content">
+ <div class="card">
+ <div class="card-header"> Parcelles à Risque (en contentieux)</div>
+ <table>
+ <thead>
+ <tr>
+ <th>Numéro Parcelle</th>
+ <th>Propriétaire</th>
+ <th>Commune</th>
+ <th>Statut</th>
+ <th>Litiges</th>
+ <th>Superficie</th>
+ </tr>
+ </thead>
+ <tbody id="parcellesBody">
+ <tr><td colspan="6" style="text-align: center;">Chargement...</td></tr>
+ </tbody>
+ </table>
+ </div>
+ </div>
+ 
+ <!-- Onglet Carte -->
+ <div id="carte" class="tab-content">
+ <div class="card">
+ <div class="card-header"> Carte Foncière Interactive</div>
+ <div id="mapContainer" style="width: 100%; height: 500px; border: 1px solid #ddd; border-radius: 6px; background: #e5e7eb; display: flex; align-items: center; justify-content: center;">
+ <p style="color: #666;">Carte Leaflet - À intégrer</p>
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ <script>
+ const token = localStorage.getItem('api_token');
+ if (!token) window.location.href = '/';
+ 
+ document.getElementById('userName').textContent = localStorage.getItem('user_name') || 'Utilisateur';
+ 
+ function switchTab(tabName) {
+ document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+ document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+ document.getElementById(tabName).classList.add('active');
+ event.target.classList.add('active');
+ }
+ 
+ async function loadAlertes() {
+ try {
+ // Alertes génériques (modèle Alerte avec titre)
+ const res = await fetch('/api/collectivite/alertes-actives', {
+ headers: { 'Authorization': `Bearer ${token}` }
+ });
+ if (res.ok) {
+ const data = await res.json();
+ const alertes = data.alertes || [];
+ document.getElementById('alertesCount').textContent = alertes.length;
+ document.getElementById('alertesBody').innerHTML = alertes.map(a => `
+ <div class="alert-box ${a.priorite === 'haute' ? 'high' : ''}">
+ <strong> ${a.titre || a.type_alerte || 'ALERTE'}</strong><br>
+ <p style="margin-top: 8px; color: #666;">${a.message || ''}</p>
+ <small style="color: #999;">
+ Priorité: <strong>${a.priorite}</strong>
+ ${a.region ? ' | ' + a.region : ''}
+ ${a.commune ? ' — ' + a.commune : ''}
+ | ${a.date_creation ? new Date(a.date_creation).toLocaleDateString('fr-FR') : ''}
+ </small>
+ </div>
+ `).join('') || '<p style="text-align: center; color: #999;">Pas d\'alertes actuellement</p>';
+ }
+ } catch (e) {
+ console.error(e);
+ }
+ }
+ 
+ async function loadParcelles() {
+ try {
+ const res = await fetch('/api/collectivite/parcelles-a-risque', {
+ headers: { 'Authorization': `Bearer ${token}` }
+ });
+ if (res.ok) {
+ const data = await res.json();
+ const parcelles = data.parcelles || [];
+ document.getElementById('parcellesCount').textContent = parcelles.length;
+ document.getElementById('parcellesBody').innerHTML = parcelles.map(p => `
+ <tr>
+ <td><strong>${p.numero_parcelle}</strong></td>
+ <td>${p.proprietaire || 'N/A'}</td>
+ <td>${p.commune || 'N/A'}</td>
+ <td><span class="badge risk">${p.statut}</span></td>
+ <td>—</td>
+ <td>${p.superficie ? p.superficie + ' m²' : 'N/A'}</td>
+ </tr>
+ `).join('') || '<tr><td colspan="6" style="text-align: center;">Aucune parcelle à risque</td></tr>';
+ }
+ } catch (e) {
+ console.error(e);
+ }
+ }
+ 
+ async function loadLitiges() {
+ try {
+ const res = await fetch('/api/litige/litiges', {
+ headers: { 'Authorization': `Bearer ${token}` }
+ });
+ if (res.ok) {
+ const data = await res.json();
+ document.getElementById('litigesCount').textContent = data.count ?? (data.litiges || []).length;
+ }
+ } catch (e) {
+ console.error(e);
+ }
+ }
 
-        async function loadStats() {
-            try {
-                const res = await fetch('/api/collectivite/statistiques?region=Maritime', {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                // stats already reflected in counts above
-            } catch (e) { console.error(e); }
-        }
-        
-        async function logout() {
-            try {
-                if (token) {
-                    await fetch('/api/auth/logout', {
-                        method: 'POST',
-                        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
-                    });
-                }
-            } catch (error) { console.error(error); }
-            finally {
-                localStorage.clear();
-                window.location.href = '/';
-            }
-        }
-        
-        loadAlertes();
-        loadParcelles();
-        loadLitiges();
-    </script>
+ async function loadStats() {
+ try {
+ const res = await fetch('/api/collectivite/statistiques?region=Maritime', {
+ headers: { 'Authorization': `Bearer ${token}` }
+ });
+ // stats already reflected in counts above
+ } catch (e) { console.error(e); }
+ }
+ 
+ async function logout() {
+ try {
+ if (token) {
+ await fetch('/api/auth/logout', {
+ method: 'POST',
+ headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
+ });
+ }
+ } catch (error) { console.error(error); }
+ finally {
+ localStorage.clear();
+ window.location.href = '/';
+ }
+ }
+ 
+ loadAlertes();
+ loadParcelles();
+ loadLitiges();
+ </script>
 </body>
 </html>

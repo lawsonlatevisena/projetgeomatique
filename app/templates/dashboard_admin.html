@@ -1,536 +1,536 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Admin - SIG Litiges Fonciers</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f5f7fa;
-        }
-        
-        .navbar {
-            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
-            color: white;
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-        
-        .navbar h1 {
-            font-size: 1.5em;
-            font-weight: 700;
-        }
-        
-        .logout-btn {
-            background: #dc2626;
-            color: white;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            white-space: nowrap;
-        }
-        
-        .logout-btn:hover {
-            background: #991b1b;
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-        
-        h2 {
-            color: #333;
-            margin-bottom: 25px;
-            font-size: 1.8em;
-        }
-        
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .stat {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            border-left: 4px solid #2563eb;
-        }
-        
-        .stat:nth-child(2) {
-            border-left-color: #f59e0b;
-        }
-        
-        .stat:nth-child(3) {
-            border-left-color: #ef4444;
-        }
-        
-        .stat:nth-child(4) {
-            border-left-color: #10b981;
-        }
-        
-        .stat-number {
-            font-size: 2em;
-            font-weight: 700;
-            color: #2563eb;
-        }
-        
-        .stat-label {
-            color: #666;
-            margin-top: 10px;
-        }
-        
-        .tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-            border-bottom: 2px solid #e0e0e0;
-        }
-        
-        .tab {
-            padding: 12px 24px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            color: #666;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s;
-        }
-        
-        .tab:hover {
-            color: #2563eb;
-        }
-        
-        .tab.active {
-            color: #2563eb;
-            border-bottom-color: #2563eb;
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        .card {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            padding: 25px;
-            margin-bottom: 25px;
-        }
-        
-        .card-header {
-            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
-            color: white;
-            padding: 20px;
-            font-weight: 600;
-            margin: -25px -25px 20px -25px;
-            border-radius: 8px 8px 0 0;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        th {
-            background: #f8f9fa;
-            padding: 12px;
-            text-align: left;
-            font-weight: 600;
-            color: #666;
-            border-bottom: 2px solid #e0e0e0;
-        }
-        
-        td {
-            padding: 12px;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        
-        .badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 4px;
-            font-size: 0.85em;
-            font-weight: 600;
-            background: #dbeafe;
-            color: #1e40af;
-        }
-        
-        button {
-            background: #2563eb;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.3s;
-        }
-        
-        button:hover {
-            background: #1e40af;
-        }
-        
-        form {
-            max-width: 500px;
-        }
-        
-        label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #333;
-        }
-        
-        input, select, textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            font-size: 1em;
-        }
-        
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-    </style>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Dashboard Admin - SIG Litiges Fonciers</title>
+ <style>
+ * {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ }
+ 
+ body {
+ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+ background: #f5f7fa;
+ }
+ 
+ .navbar {
+ background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+ color: white;
+ padding: 20px 40px;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+ }
+ 
+ .navbar h1 {
+ font-size: 1.5em;
+ font-weight: 700;
+ }
+ 
+ .logout-btn {
+ background: #dc2626;
+ color: white;
+ padding: 8px 16px;
+ border: none;
+ border-radius: 6px;
+ cursor: pointer;
+ font-weight: 600;
+ white-space: nowrap;
+ }
+ 
+ .logout-btn:hover {
+ background: #991b1b;
+ }
+ 
+ .container {
+ max-width: 1400px;
+ margin: 0 auto;
+ padding: 40px 20px;
+ }
+ 
+ h2 {
+ color: #333;
+ margin-bottom: 25px;
+ font-size: 1.8em;
+ }
+ 
+ .stats {
+ display: grid;
+ grid-template-columns: repeat(4, 1fr);
+ gap: 20px;
+ margin-bottom: 30px;
+ }
+ 
+ .stat {
+ background: white;
+ padding: 20px;
+ border-radius: 8px;
+ text-align: center;
+ box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+ border-left: 4px solid #2563eb;
+ }
+ 
+ .stat:nth-child(2) {
+ border-left-color: #f59e0b;
+ }
+ 
+ .stat:nth-child(3) {
+ border-left-color: #ef4444;
+ }
+ 
+ .stat:nth-child(4) {
+ border-left-color: #10b981;
+ }
+ 
+ .stat-number {
+ font-size: 2em;
+ font-weight: 700;
+ color: #2563eb;
+ }
+ 
+ .stat-label {
+ color: #666;
+ margin-top: 10px;
+ }
+ 
+ .tabs {
+ display: flex;
+ gap: 10px;
+ margin-bottom: 25px;
+ border-bottom: 2px solid #e0e0e0;
+ }
+ 
+ .tab {
+ padding: 12px 24px;
+ background: none;
+ border: none;
+ cursor: pointer;
+ font-weight: 600;
+ color: #666;
+ border-bottom: 3px solid transparent;
+ transition: all 0.3s;
+ }
+ 
+ .tab:hover {
+ color: #2563eb;
+ }
+ 
+ .tab.active {
+ color: #2563eb;
+ border-bottom-color: #2563eb;
+ }
+ 
+ .tab-content {
+ display: none;
+ }
+ 
+ .tab-content.active {
+ display: block;
+ }
+ 
+ .card {
+ background: white;
+ border-radius: 8px;
+ box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+ padding: 25px;
+ margin-bottom: 25px;
+ }
+ 
+ .card-header {
+ background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+ color: white;
+ padding: 20px;
+ font-weight: 600;
+ margin: -25px -25px 20px -25px;
+ border-radius: 8px 8px 0 0;
+ }
+ 
+ table {
+ width: 100%;
+ border-collapse: collapse;
+ }
+ 
+ th {
+ background: #f8f9fa;
+ padding: 12px;
+ text-align: left;
+ font-weight: 600;
+ color: #666;
+ border-bottom: 2px solid #e0e0e0;
+ }
+ 
+ td {
+ padding: 12px;
+ border-bottom: 1px solid #f0f0f0;
+ }
+ 
+ .badge {
+ display: inline-block;
+ padding: 4px 12px;
+ border-radius: 4px;
+ font-size: 0.85em;
+ font-weight: 600;
+ background: #dbeafe;
+ color: #1e40af;
+ }
+ 
+ button {
+ background: #2563eb;
+ color: white;
+ padding: 10px 20px;
+ border: none;
+ border-radius: 6px;
+ cursor: pointer;
+ font-weight: 600;
+ transition: background 0.3s;
+ }
+ 
+ button:hover {
+ background: #1e40af;
+ }
+ 
+ form {
+ max-width: 500px;
+ }
+ 
+ label {
+ display: block;
+ font-weight: 600;
+ margin-bottom: 8px;
+ color: #333;
+ }
+ 
+ input, select, textarea {
+ width: 100%;
+ padding: 10px;
+ border: 1px solid #ddd;
+ border-radius: 6px;
+ margin-bottom: 15px;
+ font-size: 1em;
+ }
+ 
+ input:focus, select:focus, textarea:focus {
+ outline: none;
+ border-color: #2563eb;
+ box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+ }
+ </style>
 </head>
 <body>
-    <div class="navbar">
-        <h1>️ SIG Litiges Fonciers - Administrateur</h1>
-        <div style="display: flex; align-items: center; gap: 20px;">
-            <span id="userName"></span>
-            <button class="logout-btn" onclick="logout()">Déconnexion</button>
-        </div>
-    </div>
-    
-    <div class="container">
-        <h2>️ Administration Système</h2>
-        
-        <div class="stats">
-            <div class="stat">
-                <div class="stat-number" id="usersCount">0</div>
-                <div class="stat-label">Utilisateurs</div>
-            </div>
-            <div class="stat">
-                <div class="stat-number" id="parcellesCount">0</div>
-                <div class="stat-label">Parcelles</div>
-            </div>
-            <div class="stat">
-                <div class="stat-number" id="litigesCount">0</div>
-                <div class="stat-label">Litiges</div>
-            </div>
-            <div class="stat">
-                <div class="stat-number" id="alertesCount">0</div>
-                <div class="stat-label">Alertes</div>
-            </div>
-        </div>
-        
-        <div class="tabs">
-            <button class="tab active" onclick="switchTab('tableau')">Tableau de Bord</button>
-            <button class="tab" onclick="switchTab('utilisateurs')"> Utilisateurs</button>
-            <button class="tab" onclick="switchTab('roles')"> Rôles & Permissions</button>
-            <button class="tab" onclick="switchTab('alertes')">️ Règles d'Alerte</button>
-            <button class="tab" onclick="switchTab('db')"> Gestion BD</button>
-        </div>
-        
-        <!-- Onglet Tableau de Bord -->
-        <div id="tableau" class="tab-content active">
-            <div class="card">
-                <div class="card-header"> Récapitulatif</div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                    <div>
-                        <h4 style="margin-bottom: 15px;">Utilisateurs Récents</h4>
-                        <table>
-                            <thead>
-                                <tr><th>Nom</th><th>Rôle</th><th>Email</th></tr>
-                            </thead>
-                            <tbody id="usersRecentsBody">
-                                <tr><td colspan="3" style="text-align: center;">Chargement...</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                        <h4 style="margin-bottom: 15px;">Statut Système</h4>
-                        <ul style="list-style: none;">
-                            <li style="padding: 8px 0;"><strong> Base de données:</strong> Connectée</li>
-                            <li style="padding: 8px 0;"><strong> API:</strong> En ligne</li>
-                            <li style="padding: 8px 0;"><strong> Authentification:</strong> Active</li>
-                            <li style="padding: 8px 0;"><strong> PostGIS:</strong> Disponible</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Onglet Utilisateurs -->
-        <div id="utilisateurs" class="tab-content">
-            <div class="card">
-                <div class="card-header"> Gestion des Utilisateurs</div>
-                <div style="margin-bottom: 20px;">
-                    <button onclick="showCreateUser()"> Créer un nouvel utilisateur</button>
-                </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Nom</th>
-                            <th>Email</th>
-                            <th>Rôle</th>
-                            <th>Date Création</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="allUsersBody">
-                        <tr><td colspan="5" style="text-align: center;">Chargement...</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        
-        <!-- Onglet Rôles -->
-        <div id="roles" class="tab-content">
-            <div class="card">
-                <div class="card-header"> Gestion des Rôles et Permissions</div>
-                <div>
-                    <h4 style="margin-top: 20px; margin-bottom: 15px;">Rôles Disponibles</h4>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Rôle</th>
-                                <th>Permissions</th>
-                                <th>Utilisateurs</th>
-                            </tr>
-                        </thead>
-                        <tbody id="rolesBody">
-                            <tr><td colspan="3" style="text-align: center;">Chargement...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Onglet Alertes -->
-        <div id="alertes" class="tab-content">
-            <div class="card">
-                <div class="card-header">️ Paramétrer les Règles d'Alerte</div>
-                <form id="alerteForm">
-                    <label>Type d'Alerte:</label>
-                    <select id="typeAlerte" required>
-                        <option value="">Sélectionner...</option>
-                        <option value="litige">Nouveau Litige</option>
-                        <option value="parcelle">Parcelle à Risque</option>
-                        <option value="validation">Validation Requise</option>
-                    </select>
-                    
-                    <label>Priorité:</label>
-                    <select id="prioriteAlerte" required>
-                        <option value="">Sélectionner...</option>
-                        <option value="basse">Basse</option>
-                        <option value="normale">Normale</option>
-                        <option value="haute">Haute</option>
-                    </select>
-                    
-                    <label>Destinataires (par rôle):</label>
-                    <select id="destinataires" multiple required>
-                        <option value="admin">Admin</option>
-                        <option value="agent_cadastre">Agent Cadastre</option>
-                        <option value="agent_judiciaire">Agent Judiciaire</option>
-                        <option value="collectivite">Collectivité</option>
-                    </select>
-                    
-                    <label>Description:</label>
-                    <textarea id="descAlerte" placeholder="Règle d'alerte" style="height: 80px;"></textarea>
-                    
-                    <button type="submit"> Enregistrer Règle</button>
-                </form>
-            </div>
-        </div>
-        
-        <!-- Onglet BD -->
-        <div id="db" class="tab-content">
-            <div class="card">
-                <div class="card-header"> Gestion Base de Données SIG</div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
-                    <div>
-                        <h4 style="margin-bottom: 10px;"> Maintenance</h4>
-                        <button style="width: 100%; margin-bottom: 10px;">Vérifier l'Intégrité</button>
-                        <button style="width: 100%; margin-bottom: 10px;">Optimiser Index</button>
-                        <button style="width: 100%; margin-bottom: 10px;">Statistiques BD</button>
-                    </div>
-                    <div>
-                        <h4 style="margin-bottom: 10px;">ℹ️ Infos Système</h4>
-                        <ul style="list-style: none;">
-                            <li style="padding: 8px 0;"><strong>BD:</strong> litige_foncier</li>
-                            <li style="padding: 8px 0;"><strong>PostGIS:</strong>  Activé</li>
-                            <li style="padding: 8px 0;"><strong>Version:</strong> PostgreSQL 12</li>
-                            <li style="padding: 8px 0;"><strong>Sauvegardes:</strong> Quotidiennes</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <script>
-        const token = localStorage.getItem('api_token');
-        if (!token) window.location.href = '/';
-        
-        document.getElementById('userName').textContent = localStorage.getItem('user_name') || 'Utilisateur';
-        
-        function switchTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
-            document.getElementById(tabName).classList.add('active');
-            event.target.classList.add('active');
-        }
+ <div class="navbar">
+ <h1> SIG Litiges Fonciers - Administrateur</h1>
+ <div style="display: flex; align-items: center; gap: 20px;">
+ <span id="userName"></span>
+ <button class="logout-btn" onclick="logout()">Déconnexion</button>
+ </div>
+ </div>
+ 
+ <div class="container">
+ <h2> Administration Système</h2>
+ 
+ <div class="stats">
+ <div class="stat">
+ <div class="stat-number" id="usersCount">0</div>
+ <div class="stat-label">Utilisateurs</div>
+ </div>
+ <div class="stat">
+ <div class="stat-number" id="parcellesCount">0</div>
+ <div class="stat-label">Parcelles</div>
+ </div>
+ <div class="stat">
+ <div class="stat-number" id="litigesCount">0</div>
+ <div class="stat-label">Litiges</div>
+ </div>
+ <div class="stat">
+ <div class="stat-number" id="alertesCount">0</div>
+ <div class="stat-label">Alertes</div>
+ </div>
+ </div>
+ 
+ <div class="tabs">
+ <button class="tab active" onclick="switchTab('tableau')">Tableau de Bord</button>
+ <button class="tab" onclick="switchTab('utilisateurs')"> Utilisateurs</button>
+ <button class="tab" onclick="switchTab('roles')"> Rôles & Permissions</button>
+ <button class="tab" onclick="switchTab('alertes')"> Règles d'Alerte</button>
+ <button class="tab" onclick="switchTab('db')"> Gestion BD</button>
+ </div>
+ 
+ <!-- Onglet Tableau de Bord -->
+ <div id="tableau" class="tab-content active">
+ <div class="card">
+ <div class="card-header"> Récapitulatif</div>
+ <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+ <div>
+ <h4 style="margin-bottom: 15px;">Utilisateurs Récents</h4>
+ <table>
+ <thead>
+ <tr><th>Nom</th><th>Rôle</th><th>Email</th></tr>
+ </thead>
+ <tbody id="usersRecentsBody">
+ <tr><td colspan="3" style="text-align: center;">Chargement...</td></tr>
+ </tbody>
+ </table>
+ </div>
+ <div>
+ <h4 style="margin-bottom: 15px;">Statut Système</h4>
+ <ul style="list-style: none;">
+ <li style="padding: 8px 0;"><strong> Base de données:</strong> Connectée</li>
+ <li style="padding: 8px 0;"><strong> API:</strong> En ligne</li>
+ <li style="padding: 8px 0;"><strong> Authentification:</strong> Active</li>
+ <li style="padding: 8px 0;"><strong> PostGIS:</strong> Disponible</li>
+ </ul>
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ <!-- Onglet Utilisateurs -->
+ <div id="utilisateurs" class="tab-content">
+ <div class="card">
+ <div class="card-header"> Gestion des Utilisateurs</div>
+ <div style="margin-bottom: 20px;">
+ <button onclick="showCreateUser()"> Créer un nouvel utilisateur</button>
+ </div>
+ <table>
+ <thead>
+ <tr>
+ <th>Nom</th>
+ <th>Email</th>
+ <th>Rôle</th>
+ <th>Date Création</th>
+ <th>Actions</th>
+ </tr>
+ </thead>
+ <tbody id="allUsersBody">
+ <tr><td colspan="5" style="text-align: center;">Chargement...</td></tr>
+ </tbody>
+ </table>
+ </div>
+ </div>
+ 
+ <!-- Onglet Rôles -->
+ <div id="roles" class="tab-content">
+ <div class="card">
+ <div class="card-header"> Gestion des Rôles et Permissions</div>
+ <div>
+ <h4 style="margin-top: 20px; margin-bottom: 15px;">Rôles Disponibles</h4>
+ <table>
+ <thead>
+ <tr>
+ <th>Rôle</th>
+ <th>Permissions</th>
+ <th>Utilisateurs</th>
+ </tr>
+ </thead>
+ <tbody id="rolesBody">
+ <tr><td colspan="3" style="text-align: center;">Chargement...</td></tr>
+ </tbody>
+ </table>
+ </div>
+ </div>
+ </div>
+ 
+ <!-- Onglet Alertes -->
+ <div id="alertes" class="tab-content">
+ <div class="card">
+ <div class="card-header"> Paramétrer les Règles d'Alerte</div>
+ <form id="alerteForm">
+ <label>Type d'Alerte:</label>
+ <select id="typeAlerte" required>
+ <option value="">Sélectionner...</option>
+ <option value="litige">Nouveau Litige</option>
+ <option value="parcelle">Parcelle à Risque</option>
+ <option value="validation">Validation Requise</option>
+ </select>
+ 
+ <label>Priorité:</label>
+ <select id="prioriteAlerte" required>
+ <option value="">Sélectionner...</option>
+ <option value="basse">Basse</option>
+ <option value="normale">Normale</option>
+ <option value="haute">Haute</option>
+ </select>
+ 
+ <label>Destinataires (par rôle):</label>
+ <select id="destinataires" multiple required>
+ <option value="admin">Admin</option>
+ <option value="agent_cadastre">Agent Cadastre</option>
+ <option value="agent_judiciaire">Agent Judiciaire</option>
+ <option value="collectivite">Collectivité</option>
+ </select>
+ 
+ <label>Description:</label>
+ <textarea id="descAlerte" placeholder="Règle d'alerte" style="height: 80px;"></textarea>
+ 
+ <button type="submit"> Enregistrer Règle</button>
+ </form>
+ </div>
+ </div>
+ 
+ <!-- Onglet BD -->
+ <div id="db" class="tab-content">
+ <div class="card">
+ <div class="card-header"> Gestion Base de Données SIG</div>
+ <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+ <div>
+ <h4 style="margin-bottom: 10px;"> Maintenance</h4>
+ <button style="width: 100%; margin-bottom: 10px;">Vérifier l'Intégrité</button>
+ <button style="width: 100%; margin-bottom: 10px;">Optimiser Index</button>
+ <button style="width: 100%; margin-bottom: 10px;">Statistiques BD</button>
+ </div>
+ <div>
+ <h4 style="margin-bottom: 10px;">ℹ Infos Système</h4>
+ <ul style="list-style: none;">
+ <li style="padding: 8px 0;"><strong>BD:</strong> litige_foncier</li>
+ <li style="padding: 8px 0;"><strong>PostGIS:</strong> Activé</li>
+ <li style="padding: 8px 0;"><strong>Version:</strong> PostgreSQL 12</li>
+ <li style="padding: 8px 0;"><strong>Sauvegardes:</strong> Quotidiennes</li>
+ </ul>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ <script>
+ const token = localStorage.getItem('api_token');
+ if (!token) window.location.href = '/';
+ 
+ document.getElementById('userName').textContent = localStorage.getItem('user_name') || 'Utilisateur';
+ 
+ function switchTab(tabName) {
+ document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+ document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+ document.getElementById(tabName).classList.add('active');
+ event.target.classList.add('active');
+ }
 
-        async function loadStats() {
-            try {
-                const res = await fetch('/api/admin/base-donnees/status', {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                if (res.ok) {
-                    const s = await res.json();
-                    document.getElementById('usersCount').textContent    = s.utilisateurs_total ?? 0;
-                    document.getElementById('parcellesCount').textContent = s.parcelles_total ?? 0;
-                    document.getElementById('litigesCount').textContent   = s.litiges_total ?? 0;
-                    document.getElementById('alertesCount').textContent   = s.alertes_actives ?? 0;
-                }
-            } catch (e) { console.error(e); }
-        }
-        
-        async function loadUsers() {
-            try {
-                const res = await fetch('/api/admin/utilisateurs', {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                if (res.ok) {
-                    const data = await res.json();
-                    const users = data.utilisateurs || data.data || data || [];
-                    document.getElementById('usersRecentsBody').innerHTML = users.slice(0, 5).map(u => `
-                        <tr>
-                            <td><strong>${u.nom}</strong></td>
-                            <td><span class="badge">${u.role || 'N/A'}</span></td>
-                            <td>${u.email}</td>
-                        </tr>
-                    `).join('') || '<tr><td colspan="3">Pas d\'utilisateurs</td></tr>';
-                    document.getElementById('allUsersBody').innerHTML = users.map(u => `
-                        <tr>
-                            <td>${u.nom}</td>
-                            <td>${u.email}</td>
-                            <td><span class="badge">${u.role || 'N/A'}</span></td>
-                            <td>${u.date_creation ? new Date(u.date_creation).toLocaleDateString('fr-FR') : 'N/A'}</td>
-                            <td>
-                                <button onclick="toggleActif(${u.id}, ${u.actif})">${u.actif ? 'Désactiver' : 'Activer'}</button>
-                            </td>
-                        </tr>
-                    `).join('') || '<tr><td colspan="5">Pas d\'utilisateurs</td></tr>';
-                }
-            } catch (e) {
-                console.error(e);
-            }
-        }
+ async function loadStats() {
+ try {
+ const res = await fetch('/api/admin/base-donnees/status', {
+ headers: { 'Authorization': `Bearer ${token}` }
+ });
+ if (res.ok) {
+ const s = await res.json();
+ document.getElementById('usersCount').textContent = s.utilisateurs_total ?? 0;
+ document.getElementById('parcellesCount').textContent = s.parcelles_total ?? 0;
+ document.getElementById('litigesCount').textContent = s.litiges_total ?? 0;
+ document.getElementById('alertesCount').textContent = s.alertes_actives ?? 0;
+ }
+ } catch (e) { console.error(e); }
+ }
+ 
+ async function loadUsers() {
+ try {
+ const res = await fetch('/api/admin/utilisateurs', {
+ headers: { 'Authorization': `Bearer ${token}` }
+ });
+ if (res.ok) {
+ const data = await res.json();
+ const users = data.utilisateurs || data.data || data || [];
+ document.getElementById('usersRecentsBody').innerHTML = users.slice(0, 5).map(u => `
+ <tr>
+ <td><strong>${u.nom}</strong></td>
+ <td><span class="badge">${u.role || 'N/A'}</span></td>
+ <td>${u.email}</td>
+ </tr>
+ `).join('') || '<tr><td colspan="3">Pas d\'utilisateurs</td></tr>';
+ document.getElementById('allUsersBody').innerHTML = users.map(u => `
+ <tr>
+ <td>${u.nom}</td>
+ <td>${u.email}</td>
+ <td><span class="badge">${u.role || 'N/A'}</span></td>
+ <td>${u.date_creation ? new Date(u.date_creation).toLocaleDateString('fr-FR') : 'N/A'}</td>
+ <td>
+ <button onclick="toggleActif(${u.id}, ${u.actif})">${u.actif ? 'Désactiver' : 'Activer'}</button>
+ </td>
+ </tr>
+ `).join('') || '<tr><td colspan="5">Pas d\'utilisateurs</td></tr>';
+ }
+ } catch (e) {
+ console.error(e);
+ }
+ }
 
-        async function loadRoles() {
-            try {
-                const res = await fetch('/api/admin/roles', {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                if (res.ok) {
-                    const data = await res.json();
-                    const roles = data.roles || [];
-                    document.getElementById('rolesBody').innerHTML = roles.map(r => `
-                        <tr>
-                            <td><strong>${r.nom}</strong><br><small style="color:#999">${r.description}</small></td>
-                            <td><small>${Object.keys(r.permissions || {}).join(', ') || 'Toutes'}</small></td>
-                            <td>${r.nb_users ?? '—'}</td>
-                        </tr>
-                    `).join('') || '<tr><td colspan="3">Pas de rôles</td></tr>';
-                }
-            } catch (e) { console.error(e); }
-        }
-        
-        document.getElementById('alerteForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Règle d\'alerte créée avec succès!');
-            this.reset();
-        });
+ async function loadRoles() {
+ try {
+ const res = await fetch('/api/admin/roles', {
+ headers: { 'Authorization': `Bearer ${token}` }
+ });
+ if (res.ok) {
+ const data = await res.json();
+ const roles = data.roles || [];
+ document.getElementById('rolesBody').innerHTML = roles.map(r => `
+ <tr>
+ <td><strong>${r.nom}</strong><br><small style="color:#999">${r.description}</small></td>
+ <td><small>${Object.keys(r.permissions || {}).join(', ') || 'Toutes'}</small></td>
+ <td>${r.nb_users ?? '—'}</td>
+ </tr>
+ `).join('') || '<tr><td colspan="3">Pas de rôles</td></tr>';
+ }
+ } catch (e) { console.error(e); }
+ }
+ 
+ document.getElementById('alerteForm').addEventListener('submit', function(e) {
+ e.preventDefault();
+ alert('Règle d\'alerte créée avec succès!');
+ this.reset();
+ });
 
-        async function toggleActif(userId, currentActif) {
-            try {
-                const res = await fetch(`/api/admin/utilisateur/${userId}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ actif: !currentActif })
-                });
-                if (res.ok) { loadUsers(); }
-            } catch (e) { console.error(e); }
-        }
-        
-        async function logout() {
-            try {
-                if (token) {
-                    await fetch('/api/auth/logout', {
-                        method: 'POST',
-                        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
-                    });
-                }
-            } catch (error) { console.error(error); }
-            finally {
-                localStorage.clear();
-                window.location.href = '/';
-            }
-        }
-        
-        function showCreateUser() {
-            const email    = prompt('Email du nouvel utilisateur:');
-            if (!email) return;
-            const nom      = prompt('Nom complet:');
-            const mdp      = prompt('Mot de passe:');
-            const roleId   = prompt('ID du rôle (1=admin, 2=cadastre, 3=judiciaire, 4=collectivite):');
-            if (!email || !nom || !mdp || !roleId) { alert('Tous les champs sont requis'); return; }
-            fetch('/api/auth/register', {
-                method: 'POST',
-                headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, nom, mot_de_passe: mdp, role_id: parseInt(roleId) })
-            }).then(r => r.json()).then(d => { alert(d.message || 'Utilisateur créé'); loadUsers(); });
-        }
-        
-        function editUser(userId) {
-            alert('Édition de l\'utilisateur ' + userId + ' à implémenter');
-        }
-        
-        loadStats();
-        loadUsers();
-        loadRoles();
-    </script>
+ async function toggleActif(userId, currentActif) {
+ try {
+ const res = await fetch(`/api/admin/utilisateur/${userId}`, {
+ method: 'PUT',
+ headers: {
+ 'Authorization': `Bearer ${token}`,
+ 'Content-Type': 'application/json'
+ },
+ body: JSON.stringify({ actif: !currentActif })
+ });
+ if (res.ok) { loadUsers(); }
+ } catch (e) { console.error(e); }
+ }
+ 
+ async function logout() {
+ try {
+ if (token) {
+ await fetch('/api/auth/logout', {
+ method: 'POST',
+ headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
+ });
+ }
+ } catch (error) { console.error(error); }
+ finally {
+ localStorage.clear();
+ window.location.href = '/';
+ }
+ }
+ 
+ function showCreateUser() {
+ const email = prompt('Email du nouvel utilisateur:');
+ if (!email) return;
+ const nom = prompt('Nom complet:');
+ const mdp = prompt('Mot de passe:');
+ const roleId = prompt('ID du rôle (1=admin, 2=cadastre, 3=judiciaire, 4=collectivite):');
+ if (!email || !nom || !mdp || !roleId) { alert('Tous les champs sont requis'); return; }
+ fetch('/api/auth/register', {
+ method: 'POST',
+ headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+ body: JSON.stringify({ email, nom, mot_de_passe: mdp, role_id: parseInt(roleId) })
+ }).then(r => r.json()).then(d => { alert(d.message || 'Utilisateur créé'); loadUsers(); });
+ }
+ 
+ function editUser(userId) {
+ alert('Édition de l\'utilisateur ' + userId + ' à implémenter');
+ }
+ 
+ loadStats();
+ loadUsers();
+ loadRoles();
+ </script>
 </body>
 </html>

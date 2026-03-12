@@ -1,513 +1,613 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Judiciaire - SIG Litiges Fonciers</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f5f7fa;
-        }
-        
-        .navbar {
-            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
-            color: white;
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-        
-        .navbar h1 {
-            font-size: 1.5em;
-            font-weight: 700;
-        }
-        
-        .logout-btn {
-            background: #dc2626;
-            color: white;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            white-space: nowrap;
-        }
-        
-        .logout-btn:hover {
-            background: #991b1b;
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-        
-        h2 {
-            color: #333;
-            margin-bottom: 25px;
-            font-size: 1.8em;
-        }
-        
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .stat {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        }
-        
-        .stat-number {
-            font-size: 2em;
-            font-weight: 700;
-            color: #dc2626;
-        }
-        
-        .stat-label {
-            color: #666;
-            margin-top: 10px;
-        }
-        
-        .tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-            border-bottom: 2px solid #e0e0e0;
-        }
-        
-        .tab {
-            padding: 12px 24px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            color: #666;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s;
-        }
-        
-        .tab:hover {
-            color: #2563eb;
-        }
-        
-        .tab.active {
-            color: #2563eb;
-            border-bottom-color: #2563eb;
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        .card {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            padding: 25px;
-            margin-bottom: 25px;
-        }
-        
-        .card-header {
-            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
-            color: white;
-            padding: 20px;
-            font-weight: 600;
-            margin: -25px -25px 20px -25px;
-            border-radius: 8px 8px 0 0;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        th {
-            background: #f8f9fa;
-            padding: 12px;
-            text-align: left;
-            font-weight: 600;
-            color: #666;
-            border-bottom: 2px solid #e0e0e0;
-        }
-        
-        td {
-            padding: 12px;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        
-        button {
-            background: #2563eb;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.3s;
-        }
-        
-        button:hover {
-            background: #1e40af;
-        }
-        
-        .badge {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.85em;
-            background: #fee2e2;
-            color: #991b1b;
-        }
-        
-        label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #333;
-        }
-        
-        input, select, textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            font-size: 1em;
-        }
-        
-        form {
-            max-width: 500px;
-        }
-    </style>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Dashboard Judiciaire - SIG Litiges Fonciers</title>
+ <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+ <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+ <style>
+ * { margin: 0; padding: 0; box-sizing: border-box; }
+
+ body {
+ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+ background: #f5f7fa;
+ }
+
+ .navbar {
+ background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+ color: white;
+ padding: 20px 40px;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+ }
+ .navbar h1 { font-size: 1.5em; font-weight: 700; }
+
+ .logout-btn {
+ background: #dc2626; color: white;
+ padding: 8px 16px; border: none;
+ border-radius: 6px; cursor: pointer; font-weight: 600;
+ }
+ .logout-btn:hover { background: #991b1b; }
+
+ .container { max-width: 1400px; margin: 0 auto; padding: 40px 20px; }
+
+ h2 { color: #333; margin-bottom: 25px; font-size: 1.8em; }
+
+ .stats {
+ display: grid; grid-template-columns: repeat(3, 1fr);
+ gap: 20px; margin-bottom: 30px;
+ }
+ .stat {
+ background: white; padding: 20px; border-radius: 8px;
+ text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+ }
+ .stat-number { font-size: 2em; font-weight: 700; color: #7c3aed; }
+ .stat-label { color: #666; margin-top: 10px; }
+
+ .tabs {
+ display: flex; gap: 10px; margin-bottom: 25px;
+ border-bottom: 2px solid #e0e0e0; flex-wrap: wrap;
+ }
+ .tab {
+ padding: 12px 24px; background: none; border: none;
+ cursor: pointer; font-weight: 600; color: #666;
+ border-bottom: 3px solid transparent; transition: all 0.3s;
+ }
+ .tab:hover { color: #7c3aed; }
+ .tab.active { color: #7c3aed; border-bottom-color: #7c3aed; }
+
+ .tab-content { display: none; }
+ .tab-content.active { display: block; }
+
+ .card {
+ background: white; border-radius: 8px;
+ box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+ padding: 25px; margin-bottom: 25px;
+ }
+ .card-header {
+ background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+ color: white; padding: 20px; font-weight: 600;
+ margin: -25px -25px 20px -25px; border-radius: 8px 8px 0 0;
+ }
+
+ #map { height: 500px; border-radius: 6px; border: 1px solid #ddd; }
+
+ .map-legend {
+ display: flex; gap: 20px; margin-top: 12px;
+ font-size: 0.9em; align-items: center;
+ }
+ .legend-dot {
+ width: 14px; height: 14px; border-radius: 50%;
+ display: inline-block; margin-right: 6px;
+ }
+
+ form { max-width: 550px; }
+ label { display: block; font-weight: 600; margin-bottom: 6px; color: #333; }
+ input, select, textarea {
+ width: 100%; padding: 10px; border: 1px solid #ddd;
+ border-radius: 6px; margin-bottom: 15px; font-size: 1em;
+ }
+ input:focus, select:focus, textarea:focus {
+ outline: none; border-color: #7c3aed;
+ box-shadow: 0 0 0 3px rgba(124,58,237,0.1);
+ }
+
+ .btn-primary {
+ background: #7c3aed; color: white; padding: 12px 28px;
+ border: none; border-radius: 6px; cursor: pointer;
+ font-weight: 600; font-size: 1em; transition: background 0.3s;
+ }
+ .btn-primary:hover { background: #5b21b6; }
+
+ .btn-danger {
+ background: #dc2626; color: white; padding: 12px 28px;
+ border: none; border-radius: 6px; cursor: pointer;
+ font-weight: 600; font-size: 1em; transition: background 0.3s;
+ }
+ .btn-danger:hover { background: #991b1b; }
+
+ .alert-box {
+ padding: 14px 18px; border-radius: 6px; margin-top: 15px;
+ font-weight: 500; display: none;
+ }
+ .alert-box.success { background: #d1fae5; color: #065f46; border-left: 4px solid #10b981; }
+ .alert-box.error { background: #fee2e2; color: #991b1b; border-left: 4px solid #ef4444; }
+ .alert-box.show { display: block; }
+
+ table { width: 100%; border-collapse: collapse; }
+ th {
+ background: #f8f9fa; padding: 12px; text-align: left;
+ font-weight: 600; color: #666; border-bottom: 2px solid #e0e0e0;
+ }
+ td { padding: 12px; border-bottom: 1px solid #f0f0f0; }
+
+ .badge {
+ display: inline-block; padding: 4px 10px; border-radius: 12px;
+ font-size: 0.82em; font-weight: 600;
+ }
+ .badge-red { background: #fee2e2; color: #991b1b; }
+ .badge-green { background: #d1fae5; color: #065f46; }
+ .badge-yellow { background: #fef3c7; color: #92400e; }
+ .badge-blue { background: #dbeafe; color: #1e40af; }
+
+ .alert-item {
+ background: #fef3c7; border-left: 4px solid #f59e0b;
+ padding: 15px; margin-bottom: 12px; border-radius: 4px;
+ }
+ .alert-item.haute { border-left-color: #ef4444; background: #fee2e2; }
+
+ .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+ @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+ </style>
 </head>
 <body>
-    <div class="navbar">
-        <h1>️ SIG Litiges Fonciers - Agent Judiciaire</h1>
-        <div style="display: flex; align-items: center; gap: 20px;">
-            <span id="userName"></span>
-            <button class="logout-btn" onclick="logout()">Déconnexion</button>
-        </div>
-    </div>
-    
-    <div class="container">
-        <h2> Gestion Judiciaire</h2>
-        
-        <div class="stats">
-            <div class="stat">
-                <div class="stat-number" id="litigCount">0</div>
-                <div class="stat-label">Litiges Actifs</div>
-            </div>
-            <div class="stat">
-                <div class="stat-number" id="dossiersCount">0</div>
-                <div class="stat-label">Dossiers</div>
-            </div>
-            <div class="stat">
-                <div class="stat-number" id="resCount">0</div>
-                <div class="stat-label">En Résolution</div>
-            </div>
-        </div>
-        
-        <div class="tabs">
-            <button class="tab active" onclick="switchTab('dossiers')"> Dossiers</button>
-            <button class="tab" onclick="switchTab('litiges')">️ Litiges</button>
-            <button class="tab" onclick="switchTab('creer')"> Nouveau Dossier</button>
-            <button class="tab" onclick="switchTab('parcelles')"> Parcelles en Contentieux</button>
-        </div>
-        
-        <!-- Onglet Dossiers -->
-        <div id="dossiers" class="tab-content active">
-            <div class="card">
-                <div class="card-header"> Liste des Dossiers de Litige</div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Numéro Dossier</th>
-                            <th>Type Litige</th>
-                            <th>Demandeur</th>
-                            <th>Défendeur</th>
-                            <th>Statut</th>
-                            <th>Date Ouverture</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="dossiersBody">
-                        <tr><td colspan="7" style="text-align: center;">Chargement...</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        
-        <!-- Onglet Litiges -->
-        <div id="litiges" class="tab-content">
-            <div class="card">
-                <div class="card-header">️ Litiges Enregistrés</div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Type Litige</th>
-                            <th>Statut</th>
-                            <th>Parcelle Associée</th>
-                            <th>Mise à Jour</th>
-                        </tr>
-                    </thead>
-                    <tbody id="litigesBody">
-                        <tr><td colspan="4" style="text-align: center;">Chargement...</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        
-        <!-- Onglet Créer Dossier -->
-        <div id="creer" class="tab-content">
-            <div class="card">
-                <div class="card-header"> Enregistrer un Nouveau Dossier de Litige</div>
-                <form id="dossiersForm">
-                    <label>Numéro de Dossier:</label>
-                    <input type="text" id="numeroDossier" placeholder="DOSS-2024-001" required>
-                    
-                    <label>Type de Litige:</label>
-                    <select id="typeLitige" required>
-                        <option value="">Sélectionner...</option>
-                        <option value="successions">Successions</option>
-                        <option value="heritages">Héritages</option>
-                        <option value="encroachement">Empiètement</option>
-                        <option value="contrat">Désaccord Contractuel</option>
-                    </select>
-                    
-                    <label>Demandeur:</label>
-                    <input type="text" id="demandeur" placeholder="Nom du demandeur" required>
-                    
-                    <label>Défendeur:</label>
-                    <input type="text" id="defendeur" placeholder="Nom du défendeur" required>
-                    
-                    <label>Numéro de Parcelle Concernée:</label>
-                    <input type="text" id="numeroParcelle" placeholder="MAR-2024-001">
-                    
-                    <label>Description du Litige:</label>
-                    <textarea id="description" placeholder="Détails du litige" style="height: 100px;"></textarea>
-                    
-                    <button type="submit"> Enregistrer Dossier</button>
-                </form>
-            </div>
-        </div>
-        
-        <!-- Onglet Parcelles -->
-        <div id="parcelles" class="tab-content">
-            <div class="card">
-                <div class="card-header"> Parcelles en Contentieux</div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Numéro Parcelle</th>
-                            <th>Propriétaire</th>
-                            <th>Commune</th>
-                            <th>Statut Juridique</th>
-                            <th>Litiges Associés</th>
-                        </tr>
-                    </thead>
-                    <tbody id="parcellesBody">
-                        <tr><td colspan="5" style="text-align: center;">Chargement...</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    
-    <script>
-        const token = localStorage.getItem('api_token');
-        if (!token) window.location.href = '/';
-        
-        document.getElementById('userName').textContent = localStorage.getItem('user_name') || 'Utilisateur';
-        
-        function switchTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
-            document.getElementById(tabName).classList.add('active');
-            event.target.classList.add('active');
-        }
-        
-        async function loadDossiers() {
-            try {
-                const res = await fetch('/api/litige/dossiers', {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                if (res.ok) {
-                    const data = await res.json();
-                    const dossiers = data.dossiers || [];
-                    document.getElementById('dossiersCount').textContent = dossiers.length;
-                    const enCours = dossiers.filter(d => d.statut === 'en_cours').length;
-                    document.getElementById('resCount').textContent = enCours;
-                    document.getElementById('dossiersBody').innerHTML = dossiers.map(d => `
-                        <tr>
-                            <td><strong>${d.numero_dossier}</strong></td>
-                            <td>${d.type_litige || 'N/A'}</td>
-                            <td>${d.demandeur || 'N/A'}</td>
-                            <td>${d.defendeur || 'N/A'}</td>
-                            <td><span class="badge">${d.statut}</span></td>
-                            <td>${d.date_ouverture ? new Date(d.date_ouverture).toLocaleDateString('fr-FR') : 'N/A'}</td>
-                            <td>
-                                <button onclick="updateStatut(${d.id}, '${d.statut}')">Mettre à jour</button>
-                            </td>
-                        </tr>
-                    `).join('') || '<tr><td colspan="7">Pas de dossiers</td></tr>';
-                }
-            } catch (e) {
-                console.error(e);
-            }
-        }
-        
-        async function loadLitiges() {
-            try {
-                const res = await fetch('/api/litige/litiges', {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                if (res.ok) {
-                    const data = await res.json();
-                    const litiges = data.litiges || [];
-                    document.getElementById('litigCount').textContent = litiges.filter(l => l.statut === 'ouvert').length;
-                    document.getElementById('litigesBody').innerHTML = litiges.map(l => `
-                        <tr>
-                            <td>${l.type || 'N/A'}</td>
-                            <td><span class="badge">${l.statut}</span></td>
-                            <td>${l.parcelle_id || 'N/A'}</td>
-                            <td>${l.date_creation ? new Date(l.date_creation).toLocaleDateString('fr-FR') : 'N/A'}</td>
-                        </tr>
-                    `).join('') || '<tr><td colspan="4">Pas de litiges</td></tr>';
-                }
-            } catch (e) {
-                console.error(e);
-            }
-        }
-        
-        async function loadParcelles() {
-            try {
-                const res = await fetch('/api/cadastre/parcelles?statut=litigieuse', {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                if (res.ok) {
-                    const data = await res.json();
-                    const parcelles = data.parcelles || [];
-                    document.getElementById('parcellesBody').innerHTML = parcelles.map(p => `
-                        <tr>
-                            <td><strong>${p.numero_parcelle}</strong></td>
-                            <td>${p.proprietaire || 'N/A'}</td>
-                            <td>${p.commune || 'N/A'}</td>
-                            <td>${p.etat_juridique || 'N/A'}</td>
-                            <td><span class="badge">${p.nombre_litiges || 0} litige(s)</span></td>
-                        </tr>
-                    `).join('') || '<tr><td colspan="5">Pas de parcelles en contentieux</td></tr>';
-                }
-            } catch (e) {
-                console.error(e);
-            }
-        }
-        
-        document.getElementById('dossiersForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const numeroDossier  = document.getElementById('numeroDossier').value.trim();
-            const typeLitige     = document.getElementById('typeLitige').value;
-            const demandeur      = document.getElementById('demandeur').value.trim();
-            const defendeur      = document.getElementById('defendeur').value.trim();
-            const numeroParcelle = document.getElementById('numeroParcelle').value.trim();
-            const description    = document.getElementById('description').value.trim();
+ <div class="navbar">
+ <h1> SIG Litiges Fonciers - Agent Judiciaire</h1>
+ <div style="display:flex;align-items:center;gap:20px;">
+ <span id="userName"></span>
+ <button class="logout-btn" onclick="logout()">Déconnexion</button>
+ </div>
+ </div>
 
-            if (!numeroDossier || !typeLitige || !demandeur || !defendeur || !description) {
-                alert('Veuillez remplir tous les champs obligatoires');
-                return;
-            }
+ <div class="container">
+ <h2> Espace Judiciaire</h2>
 
-            try {
-                const res = await fetch('/api/litige/dossier', {
-                    method: 'POST',
-                    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        numero_dossier: numeroDossier,
-                        type_litige: typeLitige,
-                        demandeur: demandeur,
-                        defendeur: defendeur,
-                        parcelle_id: numeroParcelle || null,
-                        description: description
-                    })
-                });
-                const data = await res.json();
-                if (res.ok) {
-                    alert(' ' + data.message);
-                    this.reset();
-                    loadDossiers();
-                    loadParcelles();
-                } else {
-                    alert(' ' + (data.message || 'Erreur lors de l\'enregistrement'));
-                }
-            } catch (error) {
-                alert('Erreur réseau: ' + error.message);
-            }
-        });
-        
-        async function updateStatut(dossierId, statutActuel) {
-            const statuts = ['ouvert', 'en_cours', 'resolu', 'suspendu', 'rejet'];
-            const nouveau = prompt(
-                `Statut actuel: ${statutActuel}\nNouveau statut (${statuts.join(' / ')}):`
-            );
-            if (!nouveau || !statuts.includes(nouveau)) {
-                if (nouveau) alert('Statut invalide. Valeurs acceptées: ' + statuts.join(', '));
-                return;
-            }
-            const body = { statut: nouveau };
-            if (nouveau === 'resolu') {
-                body.reference_jugement = prompt('Référence du jugement (optionnel):') || '';
-            }
-            try {
-                const res = await fetch(`/api/litige/dossier/${dossierId}`, {
-                    method: 'PUT',
-                    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-                    body: JSON.stringify(body)
-                });
-                const data = await res.json();
-                alert(res.ok ? ' ' + data.message : ' ' + data.message);
-                loadDossiers();
-            } catch (error) {
-                alert('Erreur: ' + error.message);
-            }
-        }
-        
-        async function logout() {
-            try {
-                if (token) {
-                    await fetch('/api/auth/logout', {
-                        method: 'POST',
-                        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
-                    });
-                }
-            } catch (error) { console.error(error); }
-            finally {
-                localStorage.clear();
-                window.location.href = '/';
-            }
-        }
-        
-        loadDossiers();
-        loadLitiges();
-        loadParcelles();
-    </script>
+ <div class="stats">
+ <div class="stat">
+ <div class="stat-number" id="litigCount">0</div>
+ <div class="stat-label">Litiges Actifs</div>
+ </div>
+ <div class="stat">
+ <div class="stat-number" id="dossiersCount">0</div>
+ <div class="stat-label">Dossiers Total</div>
+ </div>
+ <div class="stat">
+ <div class="stat-number" id="alertCount">0</div>
+ <div class="stat-label">Alertes Envoyées</div>
+ </div>
+ </div>
+
+ <div class="tabs">
+ <button class="tab active" onclick="switchTab('carte', this)"> Consulter la Carte</button>
+ <button class="tab" onclick="switchTab('enregistrer', this)"> Enregistrer un Litige</button>
+ <button class="tab" onclick="switchTab('alerte', this)"> Alerte au Cadastre</button>
+ <button class="tab" onclick="switchTab('dossiers', this)"> Dossiers</button>
+ </div>
+
+ <!-- ===== ONGLET CARTE ===== -->
+ <div id="carte" class="tab-content active">
+ <div class="card">
+ <div class="card-header"> Carte Foncière — Parcelles & Litiges</div>
+ <div id="map"></div>
+ <div class="map-legend">
+ <span><span class="legend-dot" style="background:#22c55e"></span>Parcelle normale</span>
+ <span><span class="legend-dot" style="background:#ef4444"></span>Litigieuse</span>
+ <span><span class="legend-dot" style="background:#f59e0b"></span>Bloquée</span>
+ </div>
+ </div>
+ </div>
+
+ <!-- ===== ONGLET ENREGISTRER LITIGE ===== -->
+ <div id="enregistrer" class="tab-content">
+ <div class="card">
+ <div class="card-header"> Enregistrer un Nouveau Litige</div>
+ <form id="litigeForm">
+ <div class="form-row">
+ <div>
+ <label>Numéro de Dossier *</label>
+ <input type="text" id="numeroDossier" placeholder="DOSS-2026-001" required>
+ </div>
+ <div>
+ <label>Numéro de Parcelle Concernée *</label>
+ <input type="text" id="numeroParcelle" placeholder="MAR-2024-001" required>
+ </div>
+ </div>
+
+ <label>Type de Litige *</label>
+ <select id="typeLitige" required>
+ <option value="">Sélectionner...</option>
+ <option value="successions">Successions</option>
+ <option value="heritages">Héritages</option>
+ <option value="encroachement">Empiètement</option>
+ <option value="contrat">Désaccord Contractuel</option>
+ <option value="double_vente">Double Vente</option>
+ <option value="conflit_limite">Conflit de Limite</option>
+ </select>
+
+ <div class="form-row">
+ <div>
+ <label>Demandeur *</label>
+ <input type="text" id="demandeur" placeholder="Nom du demandeur" required>
+ </div>
+ <div>
+ <label>Défendeur *</label>
+ <input type="text" id="defendeur" placeholder="Nom du défendeur" required>
+ </div>
+ </div>
+
+ <label>Tribunal Compétent</label>
+ <input type="text" id="tribunal" placeholder="Tribunal de première instance de Lomé">
+
+ <label>Description du Litige *</label>
+ <textarea id="description" placeholder="Décrivez les faits et circonstances du litige..." style="height:110px;" required></textarea>
+
+ <button type="submit" class="btn-primary"> Enregistrer le Litige</button>
+ <div class="alert-box" id="litigeMsg"></div>
+ </form>
+ </div>
+ </div>
+
+ <!-- ===== ONGLET ALERTE CADASTRE ===== -->
+ <div id="alerte" class="tab-content">
+ <div class="card">
+ <div class="card-header"> Envoyer une Alerte à l'Agent du Cadastre</div>
+ <form id="alerteForm">
+ <label>Numéro de Parcelle Concernée *</label>
+ <input type="text" id="alerteParcelle" placeholder="MAR-2024-001" required>
+ <small style="color:#666;display:block;margin-top:-10px;margin-bottom:15px;">
+ La parcelle doit avoir un litige actif enregistré.
+ </small>
+
+ <label>Type d'Alerte *</label>
+ <select id="alerteType" required>
+ <option value="">Sélectionner...</option>
+ <option value="blocage_operation">Blocage d'opération cadastrale</option>
+ <option value="nouveau_litige">Nouveau litige enregistré</option>
+ <option value="conflit_limite">Conflit de limite à vérifier</option>
+ <option value="double_titre">Suspicion de double titre</option>
+ <option value="saisie_judiciaire">Saisie judiciaire en cours</option>
+ <option value="verification_urgente">Vérification urgente requise</option>
+ </select>
+
+ <label>Priorité</label>
+ <select id="alertePriorite">
+ <option value="haute"> Haute</option>
+ <option value="normale" selected> Normale</option>
+ <option value="basse"> Basse</option>
+ </select>
+
+ <label>Message *</label>
+ <textarea id="alerteMessage" placeholder="Décrivez l'alerte et les actions requises par l'agent du cadastre..." style="height:110px;" required></textarea>
+
+ <button type="submit" class="btn-danger"> Envoyer l'Alerte</button>
+ <div class="alert-box" id="alerteMsg"></div>
+ </form>
+ </div>
+
+ <!-- Historique alertes envoyées -->
+ <div class="card">
+ <div class="card-header"> Alertes Envoyées au Cadastre</div>
+ <div id="alertesEnvoyees">
+ <p style="color:#999;text-align:center;padding:20px;">Chargement...</p>
+ </div>
+ </div>
+ </div>
+
+ <!-- ===== ONGLET DOSSIERS ===== -->
+ <div id="dossiers" class="tab-content">
+ <div class="card">
+ <div class="card-header"> Liste des Dossiers de Litige</div>
+ <table>
+ <thead>
+ <tr>
+ <th>N° Dossier</th>
+ <th>Type</th>
+ <th>Demandeur</th>
+ <th>Défendeur</th>
+ <th>Statut</th>
+ <th>Date</th>
+ <th>Action</th>
+ </tr>
+ </thead>
+ <tbody id="dossiersBody">
+ <tr><td colspan="7" style="text-align:center;">Chargement...</td></tr>
+ </tbody>
+ </table>
+ </div>
+ </div>
+ </div>
+
+ <script>
+ const token = localStorage.getItem('api_token');
+ if (!token) window.location.href = '/';
+ document.getElementById('userName').textContent = localStorage.getItem('user_name') || 'Utilisateur';
+
+ // ── Navigation onglets ────────────────────────────────────────────
+ function switchTab(tabName, btn) {
+ document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+ document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+ document.getElementById(tabName).classList.add('active');
+ btn.classList.add('active');
+
+ if (tabName === 'carte') initMap();
+ if (tabName === 'dossiers') loadDossiers();
+ if (tabName === 'alerte') loadAlertesEnvoyees();
+ }
+
+ // ── CARTE Leaflet ─────────────────────────────────────────────────
+ let mapInitialized = false;
+ let leafletMap = null;
+
+ function initMap() {
+ if (mapInitialized) return;
+ mapInitialized = true;
+
+ leafletMap = L.map('map').setView([6.137, 1.212], 7); // Togo
+
+ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+ attribution: '© OpenStreetMap contributors'
+ }).addTo(leafletMap);
+
+ chargerParcellesCarte();
+ }
+
+ async function chargerParcellesCarte() {
+ try {
+ const res = await fetch('/api/cadastre/carte', {
+ headers: { 'Authorization': `Bearer ${token}` }
+ });
+ if (!res.ok) return;
+ const geojson = await res.json();
+
+ // Charger aussi la liste pour avoir les coords si GeoJSON vide
+ const resList = await fetch('/api/cadastre/parcelles', {
+ headers: { 'Authorization': `Bearer ${token}` }
+ });
+ const listData = await resList.json();
+ const parcelles = listData.parcelles || [];
+
+ // Ajouter les marqueurs depuis la liste (coords simulées autour du Togo)
+ parcelles.forEach((p, idx) => {
+ const lat = 6.137 + (Math.random() - 0.5) * 2.5;
+ const lng = 1.212 + (Math.random() - 0.5) * 1.5;
+
+ const color = p.statut === 'litigieuse' ? '#ef4444'
+ : p.statut === 'bloquee' ? '#f59e0b'
+ : '#22c55e';
+
+ const marker = L.circleMarker([lat, lng], {
+ radius: 8, fillColor: color, color: '#fff',
+ weight: 2, opacity: 1, fillOpacity: 0.85
+ });
+
+ marker.bindPopup(`
+ <strong>${p.numero_parcelle}</strong><br>
+ Propriétaire : ${p.proprietaire || 'N/A'}<br>
+ Commune : ${p.commune || 'N/A'}<br>
+ Statut : <strong style="color:${color}">${p.statut}</strong><br>
+ Superficie : ${p.superficie ? p.superficie + ' m²' : 'N/A'}
+ `);
+
+ marker.addTo(leafletMap);
+ });
+
+ // Statistiques
+ document.getElementById('litigCount').textContent =
+ parcelles.filter(p => p.statut === 'litigieuse').length;
+
+ } catch (e) { console.error('Erreur carte:', e); }
+ }
+
+ // ── ENREGISTRER LITIGE ────────────────────────────────────────────
+ document.getElementById('litigeForm').addEventListener('submit', async function(e) {
+ e.preventDefault();
+ const msgDiv = document.getElementById('litigeMsg');
+ msgDiv.className = 'alert-box';
+
+ const numeroDossier = document.getElementById('numeroDossier').value.trim();
+ const numeroParcelle = document.getElementById('numeroParcelle').value.trim();
+ const typeLitige = document.getElementById('typeLitige').value;
+ const demandeur = document.getElementById('demandeur').value.trim();
+ const defendeur = document.getElementById('defendeur').value.trim();
+ const tribunal = document.getElementById('tribunal').value.trim();
+ const description = document.getElementById('description').value.trim();
+
+ if (!numeroDossier || !numeroParcelle || !typeLitige || !demandeur || !defendeur || !description) {
+ msgDiv.textContent = ' Veuillez remplir tous les champs obligatoires (*).';
+ msgDiv.className = 'alert-box error show';
+ return;
+ }
+
+ try {
+ const res = await fetch('/api/litige/dossier', {
+ method: 'POST',
+ headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+ body: JSON.stringify({
+ numero_dossier: numeroDossier,
+ parcelle_id: numeroParcelle,
+ type_litige: typeLitige,
+ demandeur, defendeur,
+ tribunal_competent: tribunal,
+ description
+ })
+ });
+ const data = await res.json();
+ if (res.ok) {
+ msgDiv.textContent = ' ' + data.message;
+ msgDiv.className = 'alert-box success show';
+ this.reset();
+ // Refresh stats
+ loadDossiers();
+ } else {
+ msgDiv.textContent = ' ' + (data.message || 'Erreur lors de l\'enregistrement');
+ msgDiv.className = 'alert-box error show';
+ }
+ } catch (err) {
+ msgDiv.textContent = ' Erreur réseau : ' + err.message;
+ msgDiv.className = 'alert-box error show';
+ }
+ });
+
+ // ── ENVOYER ALERTE CADASTRE ───────────────────────────────────────
+ document.getElementById('alerteForm').addEventListener('submit', async function(e) {
+ e.preventDefault();
+ const msgDiv = document.getElementById('alerteMsg');
+ msgDiv.className = 'alert-box';
+
+ const numParcelle = document.getElementById('alerteParcelle').value.trim();
+ const typeAlerte = document.getElementById('alerteType').value;
+ const priorite = document.getElementById('alertePriorite').value;
+ const message = document.getElementById('alerteMessage').value.trim();
+
+ if (!numParcelle || !typeAlerte || !message) {
+ msgDiv.textContent = ' Parcelle, type d\'alerte et message sont obligatoires.';
+ msgDiv.className = 'alert-box error show';
+ return;
+ }
+
+ // Résoudre le numéro parcelle → ID
+ try {
+ const searchRes = await fetch(`/api/cadastre/parcelles?numero=${encodeURIComponent(numParcelle)}`, {
+ headers: { 'Authorization': `Bearer ${token}` }
+ });
+ const searchData = await searchRes.json();
+ const parcelle = (searchData.parcelles || [])[0];
+ if (!parcelle) {
+ msgDiv.textContent = ' Parcelle introuvable : ' + numParcelle;
+ msgDiv.className = 'alert-box error show';
+ return;
+ }
+
+ const res = await fetch('/api/litige/alerte-cadastre', {
+ method: 'POST',
+ headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+ body: JSON.stringify({
+ parcelle_id: parcelle.id,
+ type_alerte: typeAlerte,
+ priorite,
+ message
+ })
+ });
+ const data = await res.json();
+ if (res.ok) {
+ msgDiv.textContent = ' ' + data.message + ' (Alerte #' + data.alerte_id + ')';
+ msgDiv.className = 'alert-box success show';
+ this.reset();
+ loadAlertesEnvoyees();
+ // Mettre à jour le compteur
+ const cur = parseInt(document.getElementById('alertCount').textContent) || 0;
+ document.getElementById('alertCount').textContent = cur + 1;
+ } else {
+ msgDiv.textContent = ' ' + (data.message || 'Erreur');
+ msgDiv.className = 'alert-box error show';
+ }
+ } catch (err) {
+ msgDiv.textContent = ' Erreur réseau : ' + err.message;
+ msgDiv.className = 'alert-box error show';
+ }
+ });
+
+ // ── CHARGER ALERTES ENVOYÉES ──────────────────────────────────────
+ async function loadAlertesEnvoyees() {
+ try {
+ const res = await fetch('/api/litige/alertes', {
+ headers: { 'Authorization': `Bearer ${token}` }
+ });
+ if (!res.ok) return;
+ const data = await res.json();
+ const alertes = data.alertes || [];
+ document.getElementById('alertCount').textContent = alertes.length;
+ const container = document.getElementById('alertesEnvoyees');
+ if (alertes.length === 0) {
+ container.innerHTML = '<p style="color:#999;text-align:center;padding:20px;">Aucune alerte envoyée</p>';
+ return;
+ }
+ container.innerHTML = alertes.map(a => `
+ <div class="alert-item ${a.priorite === 'haute' ? 'haute' : ''}">
+ <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+ <strong> ${(a.type_alerte || '').replace(/_/g,' ').toUpperCase()}</strong>
+ <span class="badge ${a.priorite === 'haute' ? 'badge-red' : a.priorite === 'basse' ? 'badge-green' : 'badge-yellow'}">
+ ${a.priorite}
+ </span>
+ </div>
+ <div style="color:#555;margin-bottom:6px;">${a.message || ''}</div>
+ <small style="color:#999;">
+ Parcelle ID : ${a.parcelle_id} | Litige ID : ${a.litige_id} |
+ ${a.date_creation ? new Date(a.date_creation).toLocaleDateString('fr-FR') : ''}
+ </small>
+ </div>
+ `).join('');
+ } catch (e) { console.error(e); }
+ }
+
+ // ── CHARGER DOSSIERS ──────────────────────────────────────────────
+ async function loadDossiers() {
+ try {
+ const res = await fetch('/api/litige/dossiers', {
+ headers: { 'Authorization': `Bearer ${token}` }
+ });
+ if (!res.ok) return;
+ const data = await res.json();
+ const dossiers = data.dossiers || [];
+ document.getElementById('dossiersCount').textContent = dossiers.length;
+ document.getElementById('litigCount').textContent =
+ dossiers.filter(d => d.statut === 'ouvert' || d.statut === 'en_cours').length;
+
+ document.getElementById('dossiersBody').innerHTML = dossiers.map(d => `
+ <tr>
+ <td><strong>${d.numero_dossier}</strong></td>
+ <td>${d.type_litige || 'N/A'}</td>
+ <td>${d.demandeur || 'N/A'}</td>
+ <td>${d.defendeur || 'N/A'}</td>
+ <td><span class="badge ${
+ d.statut === 'resolu' ? 'badge-green' :
+ d.statut === 'en_cours' ? 'badge-blue' :
+ d.statut === 'suspendu' ? 'badge-yellow': 'badge-red'
+ }">${d.statut}</span></td>
+ <td>${d.date_ouverture ? new Date(d.date_ouverture).toLocaleDateString('fr-FR') : 'N/A'}</td>
+ <td>
+ <button style="background:#7c3aed;color:white;padding:6px 12px;border:none;border-radius:4px;cursor:pointer;font-size:0.85em;"
+ onclick="majStatut(${d.id}, '${d.statut}')">
+ Mettre à jour
+ </button>
+ </td>
+ </tr>
+ `).join('') || '<tr><td colspan="7" style="text-align:center;color:#999;">Aucun dossier</td></tr>';
+ } catch (e) { console.error(e); }
+ }
+
+ // ── METTRE À JOUR STATUT ──────────────────────────────────────────
+ async function majStatut(id, statutActuel) {
+ const statuts = ['ouvert', 'en_cours', 'resolu', 'suspendu', 'rejet'];
+ const nouveau = prompt(`Statut actuel : ${statutActuel}\nNouveau statut :\n${statuts.join(' / ')}`);
+ if (!nouveau || !statuts.includes(nouveau.trim())) {
+ if (nouveau) alert('Valeur invalide. Choix : ' + statuts.join(', '));
+ return;
+ }
+ const body = { statut: nouveau.trim() };
+ if (body.statut === 'resolu') {
+ body.reference_jugement = prompt('Référence du jugement (optionnel) :') || '';
+ }
+ try {
+ const res = await fetch(`/api/litige/dossier/${id}`, {
+ method: 'PUT',
+ headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+ body: JSON.stringify(body)
+ });
+ const data = await res.json();
+ alert(res.ok ? ' ' + data.message : ' ' + data.message);
+ loadDossiers();
+ } catch (err) { alert('Erreur : ' + err.message); }
+ }
+
+ // ── LOGOUT ────────────────────────────────────────────────────────
+ async function logout() {
+ try {
+ if (token) await fetch('/api/auth/logout', {
+ method: 'POST',
+ headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
+ });
+ } catch (e) { console.error(e); }
+ finally { localStorage.clear(); window.location.href = '/'; }
+ }
+
+ // ── INIT ──────────────────────────────────────────────────────────
+ initMap();
+ loadDossiers();
+ loadAlertesEnvoyees();
+ </script>
 </body>
 </html>

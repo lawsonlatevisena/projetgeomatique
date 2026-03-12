@@ -1,383 +1,341 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIG Litiges Fonciers - Accueil</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
-            min-height: 100vh;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .login-container {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            max-width: 1000px;
-            width: 100%;
-        }
-        .header {
-            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
-            color: white;
-            padding: 40px;
-            text-align: center;
-            border-radius: 15px 15px 0 0;
-        }
-        .header h1 {
-            font-size: 2.5em;
-            margin: 0;
-            font-weight: 700;
-        }
-        .header p {
-            margin: 10px 0 0 0;
-            opacity: 0.9;
-        }
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            padding: 40px;
-        }
-        .form-section h2 {
-            color: #333;
-            font-size: 1.5em;
-            margin-bottom: 25px;
-        }
-        .users-box {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 25px;
-        }
-        .user-item {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            transition: all 0.3s;
-        }
-        .user-item:hover {
-            background: #e9ecef;
-            border-color: #2563eb;
-        }
-        .user-item input[type="radio"] {
-            margin-right: 12px;
-            cursor: pointer;
-        }
-        .user-text {
-            flex: 1;
-        }
-        .user-text .role {
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 2px;
-        }
-        .user-text .email {
-            font-size: 0.85em;
-            color: #999;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .form-group label {
-            font-weight: 600;
-            color: #555;
-            margin-bottom: 8px;
-            display: block;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 1em;
-        }
-        .btn-login {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 1em;
-            cursor: pointer;
-            margin-bottom: 20px;
-        }
-        .btn-login:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
-        }
-        .btn-init {
-            width: 100%;
-            padding: 12px;
-            background: #27ae60;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        .btn-init:hover {
-            background: #229954;
-        }
-        .roles-section h2 {
-            color: #333;
-            font-size: 1.5em;
-            margin-bottom: 25px;
-        }
-        .role-card {
-            background: #f8f9fa;
-            border-left: 4px solid #667eea;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            transition: all 0.3s;
-        }
-        .role-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-        }
-        .role-icon {
-            font-size: 2em;
-            margin-bottom: 10px;
-        }
-        .role-card h3 {
-            color: #333;
-            font-size: 1.1em;
-            margin: 10px 0;
-        }
-        .role-card p {
-            color: #666;
-            font-size: 0.9em;
-            margin: 0;
-            line-height: 1.4;
-        }
-        .alert-msg {
-            padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            display: none;
-        }
-        .alert-msg.show {
-            display: block;
-        }
-        .alert-msg.error {
-            background: #fee;
-            color: #c33;
-            border-left: 4px solid #c33;
-        }
-        .alert-msg.success {
-            background: #efe;
-            color: #3c3;
-            border-left: 4px solid #3c3;
-        }
-        .separator {
-            border-top: 1px solid #ddd;
-            margin-top: 25px;
-            padding-top: 20px;
-            color: #999;
-            font-size: 0.85em;
-        }
-        @media (max-width: 768px) {
-            .main-content {
-                grid-template-columns: 1fr;
-                gap: 20px;
-                padding: 20px;
-            }
-            .header {
-                padding: 25px;
-            }
-            .header h1 {
-                font-size: 1.8em;
-            }
-        }
-    </style>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>SIG Litiges Fonciers - Accueil</title>
+ <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+ <style>
+ body {
+ background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+ min-height: 100vh;
+ padding: 20px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ }
+ .login-container {
+ background: white;
+ border-radius: 15px;
+ box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+ max-width: 1000px;
+ width: 100%;
+ }
+ .header {
+ background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+ color: white;
+ padding: 40px;
+ text-align: center;
+ border-radius: 15px 15px 0 0;
+ }
+ .header h1 {
+ font-size: 2.5em;
+ margin: 0;
+ font-weight: 700;
+ }
+ .header p {
+ margin: 10px 0 0 0;
+ opacity: 0.9;
+ }
+ .main-content {
+ display: grid;
+ grid-template-columns: 1fr 1fr;
+ gap: 40px;
+ padding: 40px;
+ }
+ .form-section h2 {
+ color: #333;
+ font-size: 1.5em;
+ margin-bottom: 25px;
+ }
+ .users-box {
+ background: #f8f9fa;
+ padding: 15px;
+ border-radius: 8px;
+ margin-bottom: 25px;
+ }
+ .user-item {
+ padding: 10px;
+ border: 1px solid #ddd;
+ border-radius: 6px;
+ margin-bottom: 10px;
+ cursor: pointer;
+ display: flex;
+ align-items: center;
+ transition: all 0.3s;
+ }
+ .user-item:hover {
+ background: #e9ecef;
+ border-color: #2563eb;
+ }
+ .user-item input[type="radio"] {
+ margin-right: 12px;
+ cursor: pointer;
+ }
+ .user-text {
+ flex: 1;
+ }
+ .user-text .role {
+ font-weight: 600;
+ color: #333;
+ margin-bottom: 2px;
+ }
+ .user-text .email {
+ font-size: 0.85em;
+ color: #999;
+ }
+ .form-group {
+ margin-bottom: 20px;
+ }
+ .form-group label {
+ font-weight: 600;
+ color: #555;
+ margin-bottom: 8px;
+ display: block;
+ }
+ .form-group input {
+ width: 100%;
+ padding: 12px;
+ border: 1px solid #ddd;
+ border-radius: 6px;
+ font-size: 1em;
+ }
+ .btn-login {
+ width: 100%;
+ padding: 12px;
+ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+ color: white;
+ border: none;
+ border-radius: 6px;
+ font-weight: 600;
+ font-size: 1em;
+ cursor: pointer;
+ margin-bottom: 20px;
+ }
+ .btn-login:hover {
+ transform: translateY(-2px);
+ box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+ }
+ .roles-section h2 {
+ color: #333;
+ font-size: 1.5em;
+ margin-bottom: 25px;
+ }
+ .role-card {
+ background: #f8f9fa;
+ border-left: 4px solid #667eea;
+ padding: 20px;
+ border-radius: 8px;
+ margin-bottom: 15px;
+ transition: all 0.3s;
+ }
+ .role-card:hover {
+ transform: translateY(-3px);
+ box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+ }
+ .role-icon {
+ font-size: 2em;
+ margin-bottom: 10px;
+ }
+ .role-card h3 {
+ color: #333;
+ font-size: 1.1em;
+ margin: 10px 0;
+ }
+ .role-card p {
+ color: #666;
+ font-size: 0.9em;
+ margin: 0;
+ line-height: 1.4;
+ }
+ .alert-msg {
+ padding: 12px;
+ border-radius: 6px;
+ margin-bottom: 20px;
+ display: none;
+ }
+ .alert-msg.show {
+ display: block;
+ }
+ .alert-msg.error {
+ background: #fee;
+ color: #c33;
+ border-left: 4px solid #c33;
+ }
+ .alert-msg.success {
+ background: #efe;
+ color: #3c3;
+ border-left: 4px solid #3c3;
+ }
+ .separator {
+ border-top: 1px solid #ddd;
+ margin-top: 25px;
+ padding-top: 20px;
+ color: #999;
+ font-size: 0.85em;
+ }
+ @media (max-width: 768px) {
+ .main-content {
+ grid-template-columns: 1fr;
+ gap: 20px;
+ padding: 20px;
+ }
+ .header {
+ padding: 25px;
+ }
+ .header h1 {
+ font-size: 1.8em;
+ }
+ }
+ </style>
 </head>
 <body>
-    <div class="login-container">
-        <div class="header">
-            <h1>️ SIG LITIGES FONCIERS</h1>
-            <p>Système d'Information Géographique pour la Gestion des Litiges Fonciers</p>
-            <p style="font-size: 0.9em; margin-top: 10px;">Togo - Gestion Intégrée du Cadastre et des Contentieux</p>
-        </div>
-        
-        <div class="main-content">
-            <!-- Colonne Gauche -->
-            <div class="form-section">
-                <h2>Connexion</h2>
-                <div id="message" class="alert-msg"></div>
-                
-                <div class="users-box">
-                    <label style="font-weight: 600; margin-bottom: 15px; display: block;">Utilisateurs de test:</label>
-                    
-                    <div class="user-item" onclick="selectUser('admin@litige.tg', 'admin123', 'admin')">
-                        <input type="radio" name="user" value="admin">
-                        <div class="user-text">
-                            <div class="role">️ Admin</div>
-                            <div class="email">admin@litige.tg</div>
-                        </div>
-                    </div>
-                    
-                    <div class="user-item" onclick="selectUser('agent.cadastre@litige.tg', 'password123', 'agent_cadastre')">
-                        <input type="radio" name="user" value="agent_cadastre">
-                        <div class="user-text">
-                            <div class="role"> Agent Cadastre</div>
-                            <div class="email">agent.cadastre@litige.tg</div>
-                        </div>
-                    </div>
-                    
-                    <div class="user-item" onclick="selectUser('agent.judiciaire@litige.tg', 'password123', 'agent_judiciaire')">
-                        <input type="radio" name="user" value="agent_judiciaire">
-                        <div class="user-text">
-                            <div class="role">️ Agent Judiciaire</div>
-                            <div class="email">agent.judiciaire@litige.tg</div>
-                        </div>
-                    </div>
-                    
-                    <div class="user-item" onclick="selectUser('collectivite@litige.tg', 'password123', 'collectivite')">
-                        <input type="radio" name="user" value="collectivite">
-                        <div class="user-text">
-                            <div class="role">️ Collectivité</div>
-                            <div class="email">collectivite@litige.tg</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label>Email:</label>
-                    <input type="email" id="email" placeholder="admin@litige.tg">
-                </div>
-                
-                <div class="form-group">
-                    <label>Mot de passe:</label>
-                    <input type="password" id="password" placeholder="••••••••">
-                </div>
-                
-                <button class="btn-login" onclick="login()">Se connecter</button>
-                
-                <div class="separator">
-                    <p>Première utilisation?</p>
-                    <button class="btn-init" onclick="initData()">Initialiser les données de test</button>
-                    <div id="initMessage" class="alert-msg" style="margin-top: 10px;"></div>
-                </div>
-            </div>
-            
-            <!-- Colonne Droite -->
-            <div class="roles-section">
-                <h2> Rôles Disponibles</h2>
-                
-                <div class="role-card">
-                    <div class="role-icon">️</div>
-                    <h3>Administrateur</h3>
-                    <p>Gestion complète du système, utilisateurs, paramètres et statistiques globales</p>
-                </div>
-                
-                <div class="role-card">
-                    <div class="role-icon"></div>
-                    <h3>Agent Cadastre</h3>
-                    <p>Consultation et gestion du cadastre, recherche de parcelles, historique des opérations</p>
-                </div>
-                
-                <div class="role-card">
-                    <div class="role-icon">️</div>
-                    <h3>Agent Judiciaire</h3>
-                    <p>Gestion des litiges, enregistrement des contentieux, suivi des dossiers et alertes</p>
-                </div>
-                
-                <div class="role-card">
-                    <div class="role-icon">️</div>
-                    <h3>Collectivité Territoriale</h3>
-                    <p>Vue globale des parcelles, zones à risque, statistiques régionales et alertes actives</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <script>
-        function selectUser(email, password, role) {
-            document.getElementById('email').value = email;
-            document.getElementById('password').value = password;
-            document.querySelector(`input[value="${role}"]`).checked = true;
-        }
-        
-        async function login() {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const msgDiv = document.getElementById('message');
-            
-            if (!email || !password) {
-                msgDiv.className = 'alert-msg error show';
-                msgDiv.textContent = 'Email et mot de passe requis';
-                return;
-            }
-            
-            msgDiv.className = 'alert-msg success show';
-            msgDiv.textContent = 'Connexion en cours...';
-            
-            try {
-                const response = await fetch('/api/auth/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        email: email,
-                        mot_de_passe: password
-                    })
-                });
-                
-                const data = await response.json();
-                
-                if (response.ok && data.access_token) {
-                    localStorage.setItem('api_token', data.access_token);
-                    localStorage.setItem('user_name', data.user?.nom || email);
-                    const roleNom = data.user?.role || 'admin';
-                    localStorage.setItem('user_role', roleNom);
-                    msgDiv.textContent = 'Connexion réussie! Redirection...';
-                    setTimeout(() => {
-                        const encodedName = encodeURIComponent(data.user?.nom || email);
-                        window.location.href = `/dashboard?role=${roleNom}&name=${encodedName}`;
-                    }, 1000);
-                } else {
-                    msgDiv.className = 'alert-msg error show';
-                    msgDiv.textContent = data.message || 'Erreur de connexion';
-                }
-            } catch (error) {
-                msgDiv.className = 'alert-msg error show';
-                msgDiv.textContent = 'Erreur: ' + error.message;
-            }
-        }
-        
-        async function initData() {
-            const msgDiv = document.getElementById('initMessage');
-            msgDiv.className = 'alert-msg success show';
-            msgDiv.textContent = 'Initialisation en cours...';
-            
-            try {
-                const response = await fetch('/api/init-data', {
-                    method: 'POST'
-                });
-                
-                const data = await response.json();
-                
-                if (response.ok) {
-                    msgDiv.textContent = data.exists ? 'Données déjà présentes' : 'Données initialisées avec succès!';
-                } else {
-                    msgDiv.className = 'alert-msg error show';
-                    msgDiv.textContent = 'Erreur: ' + (data.error || 'Impossible d\'initialiser les données');
-                }
-            } catch (error) {
-                msgDiv.className = 'alert-msg error show';
-                msgDiv.textContent = 'Erreur: ' + error.message;
-            }
-        }
-    </script>
+ <div class="login-container">
+ <div class="header">
+ <h1> SIG LITIGES FONCIERS</h1>
+ <p>Système d'Information Géographique pour la Gestion des Litiges Fonciers</p>
+ <p style="font-size: 0.9em; margin-top: 10px;">Togo - Gestion Intégrée du Cadastre et des Contentieux</p>
+ </div>
+ 
+ <div class="main-content">
+ <!-- Colonne Gauche -->
+ <div class="form-section">
+ <h2>Connexion</h2>
+ <div id="message" class="alert-msg"></div>
+ 
+ <div class="users-box">
+ <label style="font-weight: 600; margin-bottom: 15px; display: block;">Utilisateurs de test:</label>
+ 
+ <div class="user-item" onclick="selectUser('admin@litige.tg', 'admin123', 'admin')">
+ <input type="radio" name="user" value="admin">
+ <div class="user-text">
+ <div class="role"> Admin</div>
+ <div class="email">admin@litige.tg</div>
+ </div>
+ </div>
+ 
+ <div class="user-item" onclick="selectUser('agent.judiciaire@litige.tg', 'password123', 'agent_judiciaire')">
+ <input type="radio" name="user" value="agent_judiciaire">
+ <div class="user-text">
+ <div class="role"> Agent Judiciaire</div>
+ <div class="email">agent.judiciaire@litige.tg</div>
+ </div>
+ </div>
+ 
+ <div class="user-item" onclick="selectUser('agent.cadastre@litige.tg', 'password123', 'agent_cadastre')">
+ <input type="radio" name="user" value="agent_cadastre">
+ <div class="user-text">
+ <div class="role"> Agent Cadastre</div>
+ <div class="email">agent.cadastre@litige.tg</div>
+ </div>
+ </div>
+ 
+ <div class="user-item" onclick="selectUser('collectivite@litige.tg', 'password123', 'collectivite')">
+ <input type="radio" name="user" value="collectivite">
+ <div class="user-text">
+ <div class="role"> Collectivité</div>
+ <div class="email">collectivite@litige.tg</div>
+ </div>
+ </div>
+ </div>
+ 
+ <div class="form-group">
+ <label>Email:</label>
+ <input type="email" id="email" placeholder="admin@litige.tg">
+ </div>
+ 
+ <div class="form-group">
+ <label>Mot de passe:</label>
+ <input type="password" id="password" placeholder="••••••••">
+ </div>
+ 
+ <button class="btn-login" onclick="login()">Se connecter</button>
+ </div>
+ 
+ <!-- Colonne Droite -->
+ <div class="roles-section">
+ <h2> Rôles Disponibles</h2>
+ 
+ <div class="role-card">
+ <div class="role-icon"></div>
+ <h3>Administrateur</h3>
+ <p>Gestion complète du système, utilisateurs, paramètres et statistiques globales</p>
+ </div>
+ 
+ <div class="role-card">
+ <div class="role-icon"></div>
+ <h3>Agent Judiciaire</h3>
+ <p>Gestion des litiges, enregistrement des contentieux, suivi des dossiers et alertes</p>
+ </div>
+ 
+ <div class="role-card">
+ <div class="role-icon"></div>
+ <h3>Agent Cadastre</h3>
+ <p>Consultation et gestion du cadastre, recherche de parcelles, historique des opérations</p>
+ </div>
+ 
+ <div class="role-card">
+ <div class="role-icon"></div>
+ <h3>Collectivité Territoriale</h3>
+ <p>Vue globale des parcelles, zones à risque, statistiques régionales et alertes actives</p>
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ <script>
+ function selectUser(email, password, role) {
+ document.getElementById('email').value = email;
+ document.getElementById('password').value = password;
+ document.querySelector(`input[value="${role}"]`).checked = true;
+ }
+ 
+ async function login() {
+ const email = document.getElementById('email').value;
+ const password = document.getElementById('password').value;
+ const msgDiv = document.getElementById('message');
+ 
+ if (!email || !password) {
+ msgDiv.className = 'alert-msg error show';
+ msgDiv.textContent = 'Email et mot de passe requis';
+ return;
+ }
+ 
+ msgDiv.className = 'alert-msg success show';
+ msgDiv.textContent = 'Connexion en cours...';
+ 
+ try {
+ const response = await fetch('/api/auth/login', {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json' },
+ body: JSON.stringify({
+ email: email,
+ mot_de_passe: password
+ })
+ });
+ 
+ const data = await response.json();
+ 
+ if (response.ok && data.access_token) {
+ localStorage.setItem('api_token', data.access_token);
+ localStorage.setItem('user_name', data.user?.nom || email);
+ const roleNom = data.user?.role || 'admin';
+ localStorage.setItem('user_role', roleNom);
+ msgDiv.textContent = 'Connexion réussie! Redirection...';
+ setTimeout(() => {
+ const encodedName = encodeURIComponent(data.user?.nom || email);
+ window.location.href = `/dashboard?role=${roleNom}&name=${encodedName}`;
+ }, 1000);
+ } else {
+ msgDiv.className = 'alert-msg error show';
+ msgDiv.textContent = data.message || 'Erreur de connexion';
+ }
+ } catch (error) {
+ msgDiv.className = 'alert-msg error show';
+ msgDiv.textContent = 'Erreur: ' + error.message;
+ }
+ }
+ 
+ </script>
 </body>
 </html>

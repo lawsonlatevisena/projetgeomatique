@@ -200,6 +200,93 @@ def lister_parcelles():
     }), 200
 
 
+@cadastre_bp.route('/bloquer-contentieux', methods=['POST'])
+@jwt_required()
+def bloquer_contentieux():
+    """
+    Bloquer toutes les opérations d'immatriculation liées à un dossier litigieux.
+    Place la parcelle et ses litiges actifs au contentieux (statut 'bloquee').
+    Réservé à l'agent du cadastre.
+    """
+    user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+
+    if not user or user.role.nom != 'agent_cadastre':
+        return jsonify({'message': 'Accès refusé'}), 403
+
+    data = request.get_json()
+
+    # Accepter parcelle_id (int) ou numero_parcelle (str)
+    pid = data.get('parcelle_id')
+    parcelle = None
+    if pid:
+        if str(pid).isdigit():
+            parcelle = Parcelle.query.get(int(pid))
+        else:
+            parcelle = Parcelle.query.filter_by(numero_parcelle=str(pid)).first()
+
+    if not parcelle:
+        return jsonify({'message': 'Parcelle non trouvée'}), 404
+
+    if parcelle.statut == 'bloquee':
+        return jsonify({'message': f'La parcelle {parcelle.numero_parcelle} est déjà placée au contentieux'}), 409
+
+    motif = data.get('motif', 'Blocage suite à dossier litigieux')
+
+    # 1. Bloquer la parcelle
+    parcelle.statut = 'bloquee'
+    parcelle.etat_juridique = 'contentieux'
+    if data.get('observations'):
+        parcelle.observations = data['observations']
+
+    # 2. Passer tous les litiges actifs en cours de traitement
+    litiges_bloques = []
+    litiges_actifs = Litige.query.filter(
+        Litige.parcelle_id == parcelle.id,
+        Litige.statut.in_(['ouvert'])
+    ).all()
+
+    for litige in litiges_actifs:
+        litige.statut = 'en_cours'
+        litiges_bloques.append({'id': litige.id, 'numero_dossier': litige.numero_dossier})
+
+    # 3. Créer une alerte de blocage
+    alerte = AlerteLitige(
+        parcelle_id=parcelle.id,
+        litige_id=litiges_actifs[0].id if litiges_actifs else (
+            Litige.query.filter_by(parcelle_id=parcelle.id)
+                        .order_by(Litige.date_enregistrement.desc()).first().id
+            if Litige.query.filter_by(parcelle_id=parcelle.id).count() > 0 else None
+        ),
+        type_alerte='blocage_operation',
+        message=f'Parcelle {parcelle.numero_parcelle} placée au contentieux. Motif : {motif}',
+        priorite='haute',
+        active=True
+    )
+
+    if alerte.litige_id is None:
+        # Pas de litige existant : on ne peut pas créer l'alerte (FK obligatoire)
+        db.session.add(parcelle)
+        db.session.commit()
+        return jsonify({
+            'message': f'Parcelle {parcelle.numero_parcelle} bloquée au contentieux (aucun litige lié, alerte non créée)',
+            'parcelle_id': parcelle.id,
+            'litiges_bloques': litiges_bloques
+        }), 200
+
+    db.session.add(alerte)
+    db.session.commit()
+
+    return jsonify({
+        'message': f'Parcelle {parcelle.numero_parcelle} placée au contentieux avec succès',
+        'parcelle_id': parcelle.id,
+        'numero_parcelle': parcelle.numero_parcelle,
+        'litiges_bloques': litiges_bloques,
+        'alerte_id': alerte.id,
+        'motif': motif
+    }), 200
+
+
 @cadastre_bp.route('/etat-juridique/<int:parcelle_id>', methods=['GET'])
 @jwt_required()
 def consulter_etat_juridique(parcelle_id):
